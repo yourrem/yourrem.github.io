@@ -178,13 +178,9 @@ document.getElementById('playButton').addEventListener('click', (formEvent) => {
     queryInput.value.trim(), {limit: 1})
     .then(function(results) {
       let track = results.tracks.items[0];
-      let previewUrl = track.href;
+      let previewUrl = track.preview_url;
       audioTag.src = previewUrl;
-/*
-			const source = audioContext.createMediaElementSource(audioTag);
-			source.connect(analyser);
-			analyser.connect(audioContext.destination);
-*/
+
       let request = new XMLHttpRequest();
       request.open('GET', previewUrl, true);
       request.responseType = 'arraybuffer';
