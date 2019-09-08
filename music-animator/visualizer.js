@@ -7,9 +7,6 @@ const COLOR = "black";
 const WIDTH = 10;
 
 
-const growScale = 2;
-const shrinkScale = 1.2;
-
 const SHAPE = {
   'CIRCLE': 'CIRCLE',
   'BARS': 'BARS',
@@ -24,6 +21,8 @@ class AbstractVisualizer {
     this.shapeArr = [];
     this.canvas = document.getElementById('canvas');
     this.barCanvas = document.getElementById('bar-canvas');
+    this.growScale = 2;
+    this.shrinkScale = 1.2;
   }
 
   renderBeatAnimation() {
@@ -44,16 +43,19 @@ class AbstractVisualizer {
     switch(shape.type) {
       case SHAPE.CIRCLE:
         this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
-      case SHAPE.BARS:
-        this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
+        break;
       case SHAPE.SPIRAL:
-        this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
+        this.addSpiral(shape.i * scale, shape.startingPoint);
+        break;
       case SHAPE.SQUIGGLY:
         this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
+        break;
       case SHAPE.SEMI_CIRCLE:
         this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
+        break;
       case SHAPE.LINE:
         this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
+        break;
     }
   }
 
@@ -63,7 +65,7 @@ class AbstractVisualizer {
     // shrinking or growing them based on the boolean isGrowing (flips back and
     // forth).
     this.shapeArr.forEach((shape) => {
-        this.drawShape(shape);
+        this.drawShape(shape, this.shrinkScale);
     });
   }
 
@@ -74,7 +76,7 @@ class AbstractVisualizer {
     // shrinking or growing them based on the boolean isGrowing (flips back and
     // forth).
     this.shapeArr.forEach((shape) => {
-        this.drawShape(shape);
+        this.drawShape(shape, this.growScale);
     });
   }
 
@@ -97,6 +99,15 @@ class AbstractVisualizer {
   // x=(a+b*angle)*cos(angle)
   // y=(a+b*angle)*sin(angle)
   // Returns the (x, y) point to draw at to form the spiral.
+  addSpiral(i, startingPoint) {
+    this.drawSpiral(i, startingPoint);
+    this.shapeArr.push({
+      type: 'SPIRAL',
+      i,
+      startingPoint,
+    });
+  }
+
   drawSpiral(i, startingPoint) {
     const canvas = this.canvas;
     const angle = 0.1 * i;
