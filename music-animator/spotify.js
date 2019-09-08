@@ -141,8 +141,6 @@ function analyzeAudio(audio) {
 
 function startMusic(animator) {
 	queryInput.remove();
-  drawBackground(canvas, {width: CANVAS_WIDTH, height: CANVAS_HEIGHT});
-	drawBackground(barCanvas, {width: CANVAS_WIDTH, height: BAR_CANVAS_HEIGHT});
 
   if (!audioTag.paused) {
     audioTag.pause();

@@ -5,6 +5,25 @@ const data = new Uint8Array(analyser.frequencyBinCount);
 const audioTag = document.querySelector('#audio');
 const spotifyApi = new SpotifyWebApi();
 
+class MyVisualzier extends AbstractVisualizer {
+  renderBeatAnimation() {
+    const point = {
+      x: generateRandomValue(300, 700),
+      y: generateRandomValue(100, 500),
+    };
+    const radius =  generateRandomValue(5, 25);
+    const color = generateRandomColor();
+    const width = generateRandomValue(1, 2);
+
+    this.addCircle(point, radius, {color: color, width: width})
+  }
+  clearAllShapes() {
+    const context = this.canvas.getContext("2d");
+    context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+}
+
+const visualizer = new MyVisualzier();
 
 getToken().then(function(token) {
   spotifyApi.setAccessToken(token);
@@ -21,12 +40,12 @@ function renderVisualization(analyzedAudio, index) {
 		return;
 	}
 
-  growShapes();
+  visualizer.growShapes();
 
-  if ((audioTag.currentTime * 1000) - peaks[index].timeOfPeak  > 0) {
-    shrinkShapes();
+  if ((audioTag.currentTime * 1000) - peaks[index].timeOfPeak > 0) {
+    visualizer.shrinkShapes();
 
-    renderBeatAnimation();
+    visualizer.renderBeatAnimation();
 
     requestAnimationFrame(function() {
       renderVisualization(analyzedAudio, index + 1)
@@ -39,19 +58,15 @@ function renderVisualization(analyzedAudio, index) {
   
 }
 
-function beginAnimation(audio) {
-  const analyzedAudio = analyzeAudio(audio);
-  requestAnimationFrame(function() {
-    renderVisualization(analyzedAudio)
-  });
-
-}
-
 //audioTag.addEventListener('play', renderVisualization);
 
 document.getElementById('playButton').addEventListener('click', (fromEvent) => {
   fromEvent.preventDefault();
   startMusic(function(audio) {
-    beginAnimation(audio);
+    const analyzedAudio = analyzeAudio(audio);
+    visualizer.start();
+    requestAnimationFrame(function() {
+      renderVisualization(analyzedAudio)
+    });
   });
 });
