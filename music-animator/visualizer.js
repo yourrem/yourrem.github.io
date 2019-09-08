@@ -19,14 +19,14 @@ function renderBeatAnimation() {
 		x: generateRandomValue(300, 700),
 		y: generateRandomValue(100, 500),
 	};
-    const shapeObject = {
-        point,
-        radius: generateRandomValue(5, 25),
-        color: generateRandomColor(),
-        width: generateRandomValue(1, 2),
-    };
+  const shapeObject = {
+      point,
+      radius: generateRandomValue(5, 25),
+      color: generateRandomColor(),
+      width: generateRandomValue(1, 2),
+  };
 	drawCircle(canvas, point, shapeObject.radius, {color: shapeObject.color, width: shapeObject.width})
-    shapeArr.push(shapeObject);
+  shapeArr.push(shapeObject);
 }
 
 function shrinkShapes() {
@@ -34,25 +34,25 @@ function shrinkShapes() {
 	const context = canvas.getContext("2d");
 	context.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 2) "Animate" existing shapes by re-drawing them on the canvas and
-    // shrinking or growing them based on the boolean isGrowing (flips back and
-    // forth).
-    shapeArr.forEach((shape) => {
-        drawCircle(canvas, shape.point, shape.radius / shrinkScale, {color: shape.color, width: shape.width});
-    });
+  // 2) "Animate" existing shapes by re-drawing them on the canvas and
+  // shrinking or growing them based on the boolean isGrowing (flips back and
+  // forth).
+  shapeArr.forEach((shape) => {
+      drawCircle(canvas, shape.point, shape.radius / shrinkScale, {color: shape.color, width: shape.width});
+  });
 }
 
 function growShapes() {
-    // 1) Clear all existing shapes first.
+  // 1) Clear all existing shapes first.
 	const context = canvas.getContext("2d");
 	context.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 2) "Animate" existing shapes by re-drawing them on the canvas and
-    // shrinking or growing them based on the boolean isGrowing (flips back and
-    // forth).
-    shapeArr.forEach((shape) => {
-        drawCircle(canvas, shape.point, shape.radius * growScale, {color: shape.color, width: shape.width});
-    });
+  // 2) "Animate" existing shapes by re-drawing them on the canvas and
+  // shrinking or growing them based on the boolean isGrowing (flips back and
+  // forth).
+  shapeArr.forEach((shape) => {
+      drawCircle(canvas, shape.point, shape.radius * growScale, {color: shape.color, width: shape.width});
+  });
 }
 
 function drawBars(canvas) {

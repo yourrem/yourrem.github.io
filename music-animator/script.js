@@ -2,163 +2,48 @@ const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioContext.createAnalyser();
 const data = new Uint8Array(analyser.frequencyBinCount);
 
-let buffer;
-let peaks;
-let groups;
-let previousTime = Date.now();
+const queryInput = document.querySelector('#query')
+const audioTag = document.querySelector('#audio');
+const spotifyApi = new SpotifyWebApi();
 
-let index = 0;
 
-const fps = 50;
-const INTERVAL = fps / 1000;
-
-function getToken() {
-  return fetch('https://spotify-web-api-token.herokuapp.com/token')
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(myJson) {
-      return myJson.token;
-    })
-    .catch(function(err) {
-      console.log(err);
-      debugger;
-    });
-}
-
-let spotifyApi = new SpotifyWebApi();
 getToken().then(function(token) {
   spotifyApi.setAccessToken(token);
 });
 
-let queryInput = document.querySelector('#query'),
-    audioTag = document.querySelector('#audio');
+function renderVisualization(analyzedAudio, index) {
+  const buffer = analyzedAudio.buffer;
+  const peaks = analyzedAudio.peaks;
+  const bpm = analyzedAudio.bpm;
+  const groups = analyzedAudio.groups;
+  index = index || 0;
 
-audioTag.addEventListener('play', renderVisualization);
-
-function renderVisualization() {
-    if (audioTag.currentTime > 30) {
+  if (index >= peaks.length) {
 		return;
 	}
 
-	requestAnimationFrame(renderVisualization);
+  growShapes();
 
-    if (!buffer || !peaks) {
-        return;
-    }
+  const relativePositionOfPeak = peaks[index].position / buffer.length;
+  const timeOfPeak = relativePositionOfPeak * buffer.duration * 1000;
 
-	const nowTime = Date.now();
-	const dt = nowTime - previousTime;
- 
-	if (dt > INTERVAL) {
-		const totalNumSamples = buffer.length;
-		const totalSeconds = buffer.duration;
-		const timeFraction = (audioTag.currentTime / totalSeconds).toFixed(3);
+  if (Math.abs(timeOfPeak - (audioTag.currentTime * 1000)) < 20) {
+    shrinkShapes();
 
-        growShapes();
-		if (timeFraction == (peaks[index].position / buffer.length).toFixed(3)) {
-            shrinkShapes();
-            renderBeatAnimation();
-            index++;
-		}
-	} 
-  
-	previousTime = nowTime - (dt % INTERVAL);
-}
+    renderBeatAnimation();
 
-function getPeaks(data) {
-
-  // What we're going to do here, is to divide up our audio into parts.
-
-  // We will then identify, for each part, what the loudest sample is in that
-  // part.
-
-  // It's implied that that sample would represent the most likely 'beat'
-  // within that part.
-
-  // Each part is 0.5 seconds long - or 22,050 samples.
-
-  // This will give us 60 'beats' - we will only take the loudest half of
-  // those.
-
-  // This will allow us to ignore breaks, and allow us to address tracks with
-  // a BPM below 120.
-
-  let partSize = 22050,
-      parts = data[0].length / partSize,
-      peaks = [];
-
-  for (let i = 0; i < parts; i++) {
-    let max = 0;
-    for (let j = i * partSize; j < (i + 1) * partSize; j++) {
-      let volume = Math.max(Math.abs(data[0][j]), Math.abs(data[1][j]));
-      if (!max || (volume > max.volume)) {
-        max = {
-          position: j,
-          volume: volume
-        };
-      }
-    }
-    peaks.push(max);
+    requestAnimationFrame(function() {
+      renderVisualization(analyzedAudio, index + 1)
+    });
+  } else {
+    requestAnimationFrame(function() {
+      renderVisualization(analyzedAudio, index)
+    });
   }
-
-  // We then sort the peaks according to volume...
-
-  peaks.sort(function(a, b) {
-    return b.volume - a.volume;
-  });
-
-  // ...take the loundest half of those...
-
-  peaks = peaks.splice(0, peaks.length * 0.5);
-
-  // ...and re-sort it back based on position.
-
-  peaks.sort(function(a, b) {
-    return a.position - b.position;
-  });
-
-  return peaks;
+  
 }
 
-function getIntervals(peaks) {
-
-  // What we now do is get all of our peaks, and then measure the distance to
-  // other peaks, to create intervals.  Then based on the distance between
-  // those peaks (the distance of the intervals) we can calculate the BPM of
-  // that particular interval.
-
-  // The interval that is seen the most should have the BPM that corresponds
-  // to the track itself.
-
-  let groups = [];
-
-  peaks.forEach(function(peak, index) {
-    for (let i = 1; (index + i) < peaks.length && i < 10; i++) {
-      let group = {
-        tempo: (60 * 44100) / (peaks[index + i].position - peak.position),
-        count: 1
-      };
-
-      while (group.tempo < 90) {
-        group.tempo *= 2;
-      }
-
-      while (group.tempo > 180) {
-        group.tempo /= 2;
-      }
-
-      group.tempo = Math.round(group.tempo);
-
-      if (!(groups.some(function(interval) {
-        return (interval.tempo === group.tempo ? interval.count++ : 0);
-      }))) {
-        groups.push(group);
-      }
-    }
-  });
-  return groups;
-}
+//audioTag.addEventListener('play', renderVisualization);
 
 document.getElementById('playButton').addEventListener('click', (formEvent) => {
   formEvent.preventDefault();
@@ -185,7 +70,6 @@ document.getElementById('playButton').addEventListener('click', (formEvent) => {
       request.open('GET', previewUrl, true);
       request.responseType = 'arraybuffer';
       request.onload = function() {
-
         // Create offline context
         let OfflineContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
         let offlineContext = new OfflineContext(2, 30 * 44100, 44100);
@@ -231,18 +115,14 @@ document.getElementById('playButton').addEventListener('click', (formEvent) => {
           offlineContext.startRendering();
         });
 
-        offlineContext.oncomplete = function(e) {
-          buffer = e.renderedBuffer;
-          peaks = getPeaks([buffer.getChannelData(0), buffer.getChannelData(1)]);
-          groups = getIntervals(peaks);
-
-          let top = groups.sort(function(intA, intB) {
-            return intB.count - intA.count;
-          }).splice(0, 5);
-
-					console.log("BPM: " + Math.round(top[0].tempo));
+        offlineContext.oncomplete = function(audio) {
+          const analyzedAudio = analyzeAudio(audio);
+          requestAnimationFrame(function() {
+            renderVisualization(analyzedAudio)
+          });
         };
       };
+
       request.send();
     });
 });
