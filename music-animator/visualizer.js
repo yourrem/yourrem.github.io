@@ -15,7 +15,7 @@ const growScale = 2;
 const shrinkScale = 1.2;
 
 function renderBeatAnimation() {
-    const point = {
+  const point = {
 		x: generateRandomValue(300, 700),
 		y: generateRandomValue(100, 500),
 	};
