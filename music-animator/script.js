@@ -12,9 +12,23 @@ let index = 0;
 const fps = 50;
 const INTERVAL = fps / 1000;
 
+function getToken() {
+  return fetch('https://spotify-web-api-token.herokuapp.com/token')
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(myJson) {
+      return myJson.token;
+    })
+    .catch(function(err) {
+      console.log(err);
+      debugger;
+    });
+}
+
 let spotifyApi = new SpotifyWebApi();
-spotifyApi.getToken().then(function(response) {
-  spotifyApi.setAccessToken(response.token);
+getToken().then(function(token) {
+  spotifyApi.setAccessToken(token);
 });
 
 let queryInput = document.querySelector('#query'),
@@ -147,6 +161,7 @@ function getIntervals(peaks) {
 }
 
 document.getElementById('playButton').addEventListener('click', (formEvent) => {
+  formEvent.preventDefault();
 	queryInput.remove();
   drawBackground(canvas, {width: CANVAS_WIDTH, height: CANVAS_HEIGHT});
 	drawBackground(barCanvas, {width: CANVAS_WIDTH, height: BAR_CANVAS_HEIGHT});
@@ -159,13 +174,12 @@ document.getElementById('playButton').addEventListener('click', (formEvent) => {
 		document.getElementById('playCircle').setAttribute("id", "playCirclePlaying");
   }
 
-  formEvent.preventDefault();
   spotifyApi.searchTracks(
     queryInput.value.trim(), {limit: 1})
     .then(function(results) {
       let track = results.tracks.items[0];
-      let previewUrl = track.preview_url;
-      audioTag.src = track.preview_url;
+      let previewUrl = track.href;
+      audioTag.src = previewUrl;
 /*
 			const source = audioContext.createMediaElementSource(audioTag);
 			source.connect(analyser);
