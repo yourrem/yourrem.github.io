@@ -2,7 +2,6 @@ const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioContext.createAnalyser();
 const data = new Uint8Array(analyser.frequencyBinCount);
 
-const audioTag = document.querySelector('#audio');
 const spotifyApi = new SpotifyWebApi();
 
 class MyVisualzier extends AbstractVisualizer {
@@ -40,8 +39,9 @@ function renderVisualization(analyzedAudio, index) {
 	}
 
   visualizer.growShapes();
+  const audioEl = document.querySelector('#audio');
 
-  if ((audioTag.currentTime * 1000) - peaks[index].timeOfPeak > 0) {
+  if ((audioEl.currentTime * 1000) - peaks[index].timeOfPeak > 0) {
     visualizer.shrinkShapes();
 
     visualizer.renderBeatAnimation();
@@ -57,15 +57,41 @@ function renderVisualization(analyzedAudio, index) {
   
 }
 
-//audioTag.addEventListener('play', renderVisualization);
-
-document.getElementById('playButton').addEventListener('click', (fromEvent) => {
+document.getElementById('playButton').addEventListener('click', function(fromEvent) { 
   fromEvent.preventDefault();
-  startMusic(function(audio) {
-    const analyzedAudio = analyzeAudio(audio);
-    visualizer.start();
-    requestAnimationFrame(function() {
-      renderVisualization(analyzedAudio)
-    });
-  });
+
+  const audioEl = document.querySelector('#audio');
+  const queryInput = document.querySelector('#query')
+
+  if(!audioEl.src) {
+    spotifyApi.searchTracks(queryInput.value.trim(), {limit: 1}) 
+      .then(function(results) {
+        let track = results.tracks.items[0];
+        let previewUrl = track.preview_url;
+        if(previewUrl) {
+          queryInput.remove();
+
+          startMusic(audioEl, previewUrl, function(audio) {
+            const analyzedAudio = analyzeAudio(audio);
+            visualizer.start();
+            requestAnimationFrame(function() {
+              renderVisualization(analyzedAudio)
+            });
+          });
+        } else {
+          console.warn('This song does not have a preview');
+        }
+      })
+      .catch(function(error) {
+        console.warn('Something went wrong');
+        console.warn(error);
+      });
+  } else if (!audioEl.paused) {
+    audioEl.pause();
+		document.getElementById('playCirclePlaying').setAttribute("id", "playCircle");
+  } else {
+    audioEl.play();
+		document.getElementById('playCircle').setAttribute("id", "playCirclePlaying");
+  }
+
 });
