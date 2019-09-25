@@ -27,9 +27,7 @@ getToken().then(function(token) {
   spotifyApi.setAccessToken(token);
 });
 
-let i = 0;
 function renderVisualization(analyzedAudio, index) {
-  console.log(i++);
   const buffer = analyzedAudio.buffer;
   const peaks = analyzedAudio.peaks;
   const bpm = analyzedAudio.bpm;
@@ -77,9 +75,7 @@ document.getElementById('playButton').addEventListener('click', function(fromEve
             const analyzedAudio = analyzeAudio(audio);
             visualizer.start();
             audioEl.play();
-            requestAnimationFrame(function() {
-              renderVisualization(analyzedAudio)
-            });
+            renderVisualization(analyzedAudio)
           });
         } else {
           console.warn('This song does not have a preview');

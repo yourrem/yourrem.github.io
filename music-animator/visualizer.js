@@ -45,7 +45,7 @@ class AbstractVisualizer {
         this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
         break;
       case SHAPE.SPIRAL:
-        this.addSpiral(shape.i * scale, shape.startingPoint);
+        this.drawSpiral(shape.i * scale, shape.startingPoint);
         break;
       case SHAPE.SQUIGGLY:
         this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
@@ -102,7 +102,7 @@ class AbstractVisualizer {
   addSpiral(i, startingPoint) {
     this.drawSpiral(i, startingPoint);
     this.shapeArr.push({
-      type: 'SPIRAL',
+      type: Shape.SPIRAL,
       i,
       startingPoint,
     });
