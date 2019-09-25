@@ -17,7 +17,7 @@ class MyVisualzier extends AbstractVisualizer {
     //this.addCircle(point, radius, {color: color, width: width})
 
     const i =  generateRandomValue(5, 25, color);
-    this.addSpiral(i, point, color)
+    this.drawSquigglyLine(point, radius, {width, color});
   }
 }
 

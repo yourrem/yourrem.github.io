@@ -48,7 +48,7 @@ class AbstractVisualizer {
         this.drawSpiral(shape.i * scale, shape.startingPoint, shape.color);
         break;
       case Shape.SQUIGGLY:
-        this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
+        this.drawSquigglyLine(shape.startPoint, shape.radius * scale, {color: shape.color, width: shape.width});
         break;
       case Shape.SEMI_CIRCLE:
         this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
@@ -213,32 +213,28 @@ class AbstractVisualizer {
         y: vector.y / length,
       };
       
-      drawSemiCircle(
-        context, 
+      this.drawSemiCircle(
         {x: startPoint.x, y: startPoint.y}, 
         radius, 
         0, 
         Math.PI, 
         width, 
         color);
-      drawSemiCircle(
-        context, 
+      this.drawSemiCircle(
         {x: (startPoint.x + 2 * radius), y: startPoint.y}, 
         radius,  
         Math.PI, 
         0,
         width, 
         color);
-      drawSemiCircle(
-        context, 
+      this.drawSemiCircle(
         {x: (startPoint.x + 4 * radius), y: startPoint.y}, 
         radius, 
         0, 
         Math.PI, 
         width, 
         color);
-      drawSemiCircle(
-        context, 
+      this.drawSemiCircle(
         {x: endPoint.x, y: endPoint.y}, 
         radius,  
         Math.PI, 
