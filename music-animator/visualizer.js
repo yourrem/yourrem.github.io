@@ -51,10 +51,10 @@ class AbstractVisualizer {
         this.drawSquigglyLine(shape.startPoint, shape.radius * scale, {color: shape.color, width: shape.width});
         break;
       case Shape.SEMI_CIRCLE:
-        this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
+        this.drawSemiCircle(shape.point, shape.radius * scale, shape.color, shape.width);
         break;
       case Shape.LINE:
-        this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
+        this.drawLine(shape.point, shape.endpoint * scale, {color: shape.color, width: shape.width});
         break;
     }
   }

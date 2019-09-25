@@ -23,18 +23,6 @@ class MyVisualzier extends AbstractVisualizer {
 
 const visualizer = new MyVisualzier();
 
-
-visualizer.start();
-setTimeout(() => visualizer.renderBeatAnimation(), 1000);
-setTimeout(() => visualizer.renderBeatAnimation(), 2000);
-setTimeout(() => visualizer.renderBeatAnimation(), 3000);
-setTimeout(() => visualizer.renderBeatAnimation(), 4000);
-setTimeout(() => visualizer.renderBeatAnimation(), 5000);
-
-
-
-/*
-
 getToken().then(function(token) {
   spotifyApi.setAccessToken(token);
 });
@@ -105,4 +93,3 @@ document.getElementById('playButton').addEventListener('click', function(fromEve
   }
 
 });
-*/
