@@ -14,14 +14,26 @@ class MyVisualzier extends AbstractVisualizer {
     const color = generateRandomColor();
     const width = generateRandomValue(1, 2);
 
-    this.addCircle(point, radius, {color: color, width: width})
+    //this.addCircle(point, radius, {color: color, width: width})
 
-    //const i =  generateRandomValue(5, 25);
-    //this.addSpiral(i, point)
+    const i =  generateRandomValue(5, 25, color);
+    this.addSpiral(i, point, color)
   }
 }
 
 const visualizer = new MyVisualzier();
+
+
+visualizer.start();
+setTimeout(() => visualizer.renderBeatAnimation(), 1000);
+setTimeout(() => visualizer.renderBeatAnimation(), 2000);
+setTimeout(() => visualizer.renderBeatAnimation(), 3000);
+setTimeout(() => visualizer.renderBeatAnimation(), 4000);
+setTimeout(() => visualizer.renderBeatAnimation(), 5000);
+
+
+
+/*
 
 getToken().then(function(token) {
   spotifyApi.setAccessToken(token);
@@ -73,7 +85,6 @@ document.getElementById('playButton').addEventListener('click', function(fromEve
 
           startMusic(audioEl, previewUrl, function(audio) {
             const analyzedAudio = analyzeAudio(audio);
-            visualizer.start();
             audioEl.play();
             renderVisualization(analyzedAudio)
           });
@@ -94,3 +105,4 @@ document.getElementById('playButton').addEventListener('click', function(fromEve
   }
 
 });
+*/

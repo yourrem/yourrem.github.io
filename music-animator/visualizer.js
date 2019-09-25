@@ -7,7 +7,7 @@ const COLOR = "black";
 const WIDTH = 10;
 
 
-const SHAPE = {
+const Shape = {
   'CIRCLE': 'CIRCLE',
   'BARS': 'BARS',
   'SPIRAL': 'SPIRAL',
@@ -41,19 +41,19 @@ class AbstractVisualizer {
 
   drawShape(shape, scale = 1.0) {
     switch(shape.type) {
-      case SHAPE.CIRCLE:
+      case Shape.CIRCLE:
         this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
         break;
-      case SHAPE.SPIRAL:
-        this.drawSpiral(shape.i * scale, shape.startingPoint);
+      case Shape.SPIRAL:
+        this.drawSpiral(shape.i * scale, shape.startingPoint, shape.color);
         break;
-      case SHAPE.SQUIGGLY:
+      case Shape.SQUIGGLY:
         this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
         break;
-      case SHAPE.SEMI_CIRCLE:
+      case Shape.SEMI_CIRCLE:
         this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
         break;
-      case SHAPE.LINE:
+      case Shape.LINE:
         this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
         break;
     }
@@ -99,21 +99,33 @@ class AbstractVisualizer {
   // x=(a+b*angle)*cos(angle)
   // y=(a+b*angle)*sin(angle)
   // Returns the (x, y) point to draw at to form the spiral.
-  addSpiral(i, startingPoint) {
-    this.drawSpiral(i, startingPoint);
+  addSpiral(i, startingPoint, color) {
+    this.drawSpiral(i, startingPoint, color);
     this.shapeArr.push({
       type: Shape.SPIRAL,
       i,
       startingPoint,
+      color,
     });
   }
 
-  drawSpiral(i, startingPoint) {
+  drawSpiral(i, startingPoint, color) {
     const canvas = this.canvas;
+    const context = canvas.getContext("2d");
     const angle = 0.1 * i;
-    const x = (1 + angle) * Math.cos(angle) + startingPoint.x;
-    const y = (1 + angle) * Math.sin(angle) + startingPoint.y;
-    return {x, y};
+
+    const x = (1 + angle) * Math.cos(0) + startingPoint.x;
+    const y = (1 + angle) * Math.sin(0) + startingPoint.y;
+
+    context.beginPath();
+    for (let i = 0; i < 360; i ++) {
+      const angle = 0.1 * i;
+      const x = (1 + angle) * Math.cos(angle) + startingPoint.x;
+      const y = (1 + angle) * Math.sin(angle) + startingPoint.y;
+      context.lineTo(x, y);
+    }
+    context.strokeStyle = color;
+    context.stroke();
   }
 
 
@@ -160,7 +172,7 @@ class AbstractVisualizer {
     this.drawCircle(centerPoint, radius, circleProperties);
 
     const shapeObj = {
-      type: SHAPE.CIRCLE,
+      type: Shape.CIRCLE,
       radius,
       point: centerPoint,
       color: circleProperties.color,
