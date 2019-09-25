@@ -10,14 +10,14 @@ class MyVisualzier extends AbstractVisualizer {
       x: generateRandomValue(300, 700),
       y: generateRandomValue(100, 500),
     };
-    //const radius =  generateRandomValue(5, 25);
-    //const color = generateRandomColor();
-    //const width = generateRandomValue(1, 2);
+    const radius =  generateRandomValue(5, 25);
+    const color = generateRandomColor();
+    const width = generateRandomValue(1, 2);
 
-    //this.addCircle(point, radius, {color: color, width: width})
+    this.addCircle(point, radius, {color: color, width: width})
 
-    const i =  generateRandomValue(5, 25);
-    this.addSpiral(i, point)
+    //const i =  generateRandomValue(5, 25);
+    //this.addSpiral(i, point)
   }
 }
 
@@ -27,7 +27,9 @@ getToken().then(function(token) {
   spotifyApi.setAccessToken(token);
 });
 
+let i = 0;
 function renderVisualization(analyzedAudio, index) {
+  console.log(i++);
   const buffer = analyzedAudio.buffer;
   const peaks = analyzedAudio.peaks;
   const bpm = analyzedAudio.bpm;
@@ -74,6 +76,7 @@ document.getElementById('playButton').addEventListener('click', function(fromEve
           startMusic(audioEl, previewUrl, function(audio) {
             const analyzedAudio = analyzeAudio(audio);
             visualizer.start();
+            audioEl.play();
             requestAnimationFrame(function() {
               renderVisualization(analyzedAudio)
             });
