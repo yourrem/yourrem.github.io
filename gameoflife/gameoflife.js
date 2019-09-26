@@ -167,7 +167,7 @@ class Controls {
 		this.started = false;
 		this.timer = null;
 		this.generation = 0;
-		this.generationElement = document.getElementById('generation');
+		//this.generationElement = document.getElementById('generation');
 	}
 
 	init(shapes) {
@@ -258,7 +258,7 @@ class Controls {
 
 	setGeneration(gen) {
 		this.generation = gen;
-		this.generationElement.innerHTML = gen;
+		//this.generationElement.innerHTML = gen;
 	}
 
 	animate() {
@@ -281,6 +281,9 @@ class GameOfLife {
 	constructor() {
 	}
 
+    /**
+     *  TODO(you): Fill in game of life rules logic.
+     */
 	next(shape) {
 		let neighbours = {};
 		let newShape = [];
