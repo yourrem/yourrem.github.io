@@ -4,7 +4,7 @@ const data = new Uint8Array(analyser.frequencyBinCount);
 
 const spotifyApi = new SpotifyWebApi();
 
-class MyVisualzier extends AbstractVisualizer {
+class MyVisualizer extends AbstractVisualizer {
   renderBeatAnimation() {
     const point = {
       x: generateRandomValue(300, 700),
@@ -21,7 +21,7 @@ class MyVisualzier extends AbstractVisualizer {
   }
 }
 
-const visualizer = new MyVisualzier();
+const visualizer = new MyVisualizer();
 
 getToken().then(function(token) {
   spotifyApi.setAccessToken(token);
@@ -59,6 +59,9 @@ function renderVisualization(analyzedAudio, index) {
   
 }
 
+/**
+ * TODO(you): Add a 'click' event listener that starts the music.
+ *
 document.getElementById('playButton').addEventListener('click', function(fromEvent) { 
   fromEvent.preventDefault();
 
