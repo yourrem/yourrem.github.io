@@ -61,7 +61,7 @@ function renderVisualization(analyzedAudio, index) {
 
 /**
  * TODO(you): Add a 'click' event listener that starts the music.
- *
+ */
 document.getElementById('playButton').addEventListener('click', function(fromEvent) { 
   fromEvent.preventDefault();
 
