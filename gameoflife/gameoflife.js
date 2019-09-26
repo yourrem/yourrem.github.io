@@ -44,7 +44,7 @@ class Canvas {
 
 	click(fn) {
 		this.obj.addEventListener('click', (evt) => {
-			let rect = canvas.obj.first.getBoundingClientRect();
+			let rect = canvas.obj.getBoundingClientRect();
 			let left = Math.floor(rect.left + window.pageXOffset);
 			let top = Math.floor(rect.top + window.pageYOffset);
 			let cellSize = canvas.cellSize;
