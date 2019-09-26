@@ -10,18 +10,32 @@ class MyVisualzier extends AbstractVisualizer {
       x: generateRandomValue(300, 700),
       y: generateRandomValue(100, 500),
     };
+    const point2 = {
+      x: generateRandomValue(300, 700),
+      y: generateRandomValue(100, 500),
+    };
     const radius =  generateRandomValue(5, 25);
     const color = generateRandomColor();
     const width = generateRandomValue(1, 2);
+    const i =  generateRandomValue(5, 25);
+    const startAngle =  generateRandomValue(0, Math.PI);
+    const endAngle =  generateRandomValue(0, Math.PI);
 
-    this.addCircle(point, radius, {color: color, width: width})
-
-    //const i =  generateRandomValue(5, 25, color);
-    //this.drawSquigglyLine(point, radius, {width, color});
+    this.drawCircle(point, radius, {});
+    //this.drawSemiCircle(point, radius, startAngle, endAngle, 10, color);
+    //this.drawLine(point, point2, {});
+    //this.drawSpiral(i, point, color)
+    //this.drawSquigglyLine(point, i, {});
   }
 }
 
 const visualizer = new MyVisualzier();
+visualizer.start();
+visualizer.renderBeatAnimation();
+visualizer.renderBeatAnimation();
+visualizer.renderBeatAnimation();
+visualizer.renderBeatAnimation();
+visualizer.renderBeatAnimation();
 
 getToken().then(function(token) {
   spotifyApi.setAccessToken(token);
@@ -38,11 +52,9 @@ function renderVisualization(analyzedAudio, index) {
 		return;
 	}
 
-  visualizer.growShapes();
   const audioEl = document.querySelector('#audio');
 
   if ((audioEl.currentTime * 1000) - peaks[index].timeOfPeak > 0) {
-    visualizer.shrinkShapes();
 
     visualizer.renderBeatAnimation();
 

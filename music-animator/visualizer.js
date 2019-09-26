@@ -9,7 +9,6 @@ const WIDTH = 10;
 
 const Shape = {
   'CIRCLE': 'CIRCLE',
-  'BARS': 'BARS',
   'SPIRAL': 'SPIRAL',
   'SQUIGGLY': 'SQUIGGLY',
   'SEMI_CIRCLE': 'SEMI_CIRCLE',
@@ -59,6 +58,9 @@ class AbstractVisualizer {
     }
   }
 
+  /**
+   * TODO do we want to do this?
+   */
   shrinkShapes() {
     this.clearAllShapes();
     // 2) "Animate" existing shapes by re-drawing them on the canvas and
@@ -69,6 +71,9 @@ class AbstractVisualizer {
     });
   }
 
+  /**
+   * TODO do we want to do this?
+   */
   growShapes() {
     this.clearAllShapes();
 
@@ -80,6 +85,9 @@ class AbstractVisualizer {
     });
   }
 
+  /**
+   * TODO do we want to do this?
+  */
   drawBars() {
     const canvas = this.canvas;
     const context = canvas.getContext("2d");
