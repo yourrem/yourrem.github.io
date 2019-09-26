@@ -190,8 +190,9 @@ class Controls {
 			controls.next();
 		});
 
-		document.getElementById('size').addEventListener('change', sizeListener);
-		document.getElementById('size').addEventListener('input', sizeListener);
+        // Hiding size selector for now.
+		//document.getElementById('size').addEventListener('change', sizeListener);
+		//document.getElementById('size').addEventListener('input', sizeListener);
 
 		function sizeListener() {
 			let oldGridSize = controls.canvas.getGridSize();
