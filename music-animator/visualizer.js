@@ -142,8 +142,8 @@ class AbstractVisualizer {
     const context = canvas.getContext("2d");
     context.canvas.width = canvasDimensions.width;
     context.canvas.height = canvasDimensions.height;
-    context.fillStyle = color;
-    context.fillRect(0, 0, canvasDimensions.width, canvasDimensions.height);
+    //context.fillStyle = color;
+    //context.fillRect(0, 0, canvasDimensions.width, canvasDimensions.height);
   }
 
   drawLine(startPoint, endPoint, lineProperties) {

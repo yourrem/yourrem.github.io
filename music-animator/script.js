@@ -14,10 +14,10 @@ class MyVisualzier extends AbstractVisualizer {
     const color = generateRandomColor();
     const width = generateRandomValue(1, 2);
 
-    //this.addCircle(point, radius, {color: color, width: width})
+    this.addCircle(point, radius, {color: color, width: width})
 
-    const i =  generateRandomValue(5, 25, color);
-    this.drawSquigglyLine(point, radius, {width, color});
+    //const i =  generateRandomValue(5, 25, color);
+    //this.drawSquigglyLine(point, radius, {width, color});
   }
 }
 
