@@ -21,7 +21,7 @@ class MyVisualzier extends AbstractVisualizer {
     const startAngle =  generateRandomValue(0, Math.PI);
     const endAngle =  generateRandomValue(0, Math.PI);
 
-    this.drawCircle(point, radius, {});
+    //this.drawCircle(point, radius, {});
     //this.drawSemiCircle(point, radius, startAngle, endAngle, 10, color);
     //this.drawLine(point, point2, {});
     //this.drawSpiral(i, point, color)
@@ -30,12 +30,6 @@ class MyVisualzier extends AbstractVisualizer {
 }
 
 const visualizer = new MyVisualzier();
-visualizer.start();
-visualizer.renderBeatAnimation();
-visualizer.renderBeatAnimation();
-visualizer.renderBeatAnimation();
-visualizer.renderBeatAnimation();
-visualizer.renderBeatAnimation();
 
 getToken().then(function(token) {
   spotifyApi.setAccessToken(token);
