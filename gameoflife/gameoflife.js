@@ -147,7 +147,7 @@ class Shape {
 		this.redraw();
 
 		function cellIndex(cell) {
-			index = -1;
+			let index = -1;
 			shape.current.forEach((c, i) => {
 				if (c[0] == cell[0] && c[1] == cell[1]) {
 					index = i;
