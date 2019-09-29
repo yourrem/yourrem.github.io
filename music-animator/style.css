@@ -13,6 +13,8 @@ body {
 	display: flex;
 	flex-direction: column;
   align-self: center;
+  position: absolute;
+  bottom: 100px
 }
 
 #container {
@@ -157,4 +159,7 @@ body {
     animation-name: pulse; 
 }
 
-
+html {
+  background: linear-gradient(0deg, rgba(49,47,87,1) 1%, rgba(198,194,208,1) 62%); 
+  height: 100%;
+}

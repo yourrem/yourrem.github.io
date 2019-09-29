@@ -10,14 +10,22 @@ class MyVisualizer extends AbstractVisualizer {
       x: generateRandomValue(300, 700),
       y: generateRandomValue(100, 500),
     };
+    const point2 = {
+      x: generateRandomValue(300, 700),
+      y: generateRandomValue(100, 500),
+    };
     const radius =  generateRandomValue(5, 25);
     const color = generateRandomColor();
     const width = generateRandomValue(1, 2);
+    const i =  generateRandomValue(5, 25);
+    const startAngle =  generateRandomValue(0, Math.PI);
+    const endAngle =  generateRandomValue(0, Math.PI);
 
-    this.addCircle(point, radius, {color: color, width: width})
-
-    //const i =  generateRandomValue(5, 25);
-    //this.addSpiral(i, point)
+    //this.drawCircle(point, radius, {});
+    //this.drawSemiCircle(point, radius, startAngle, endAngle, 10, color);
+    //this.drawLine(point, point2, {});
+    //this.drawSpiral(i, point, color)
+    //this.drawSquigglyLine(point, i, {});
   }
 }
 
@@ -27,9 +35,7 @@ getToken().then(function(token) {
   spotifyApi.setAccessToken(token);
 });
 
-let i = 0;
 function renderVisualization(analyzedAudio, index) {
-  console.log(i++);
   const buffer = analyzedAudio.buffer;
   const peaks = analyzedAudio.peaks;
   const bpm = analyzedAudio.bpm;
@@ -40,11 +46,9 @@ function renderVisualization(analyzedAudio, index) {
 		return;
 	}
 
-  visualizer.growShapes();
   const audioEl = document.querySelector('#audio');
 
   if ((audioEl.currentTime * 1000) - peaks[index].timeOfPeak > 0) {
-    visualizer.shrinkShapes();
 
     visualizer.renderBeatAnimation();
 
@@ -78,11 +82,8 @@ document.getElementById('playButton').addEventListener('click', function(fromEve
 
           startMusic(audioEl, previewUrl, function(audio) {
             const analyzedAudio = analyzeAudio(audio);
-            visualizer.start();
             audioEl.play();
-            requestAnimationFrame(function() {
-              renderVisualization(analyzedAudio)
-            });
+            renderVisualization(analyzedAudio)
           });
         } else {
           console.warn('This song does not have a preview');
