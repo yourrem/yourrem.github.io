@@ -72,7 +72,7 @@ getToken().then(function(token) {
 });
 
 /**
- * TODO(you): Add 'click' event listener and use Visualizer to start animation.
+ * TODO(you): Add a 'click' event listener that starts the music.
  */
 document.getElementById('playButton').addEventListener('click', function(fromEvent) { 
   fromEvent.preventDefault();

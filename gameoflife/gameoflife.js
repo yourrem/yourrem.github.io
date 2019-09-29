@@ -44,7 +44,7 @@ class Canvas {
 
 	click(fn) {
 		this.obj.addEventListener('click', (evt) => {
-			let rect = canvas.obj.first.getBoundingClientRect();
+			let rect = canvas.obj.getBoundingClientRect();
 			let left = Math.floor(rect.left + window.pageXOffset);
 			let top = Math.floor(rect.top + window.pageYOffset);
 			let cellSize = canvas.cellSize;
@@ -147,7 +147,7 @@ class Shape {
 		this.redraw();
 
 		function cellIndex(cell) {
-			index = -1;
+			let index = -1;
 			shape.current.forEach((c, i) => {
 				if (c[0] == cell[0] && c[1] == cell[1]) {
 					index = i;
@@ -167,7 +167,7 @@ class Controls {
 		this.started = false;
 		this.timer = null;
 		this.generation = 0;
-		this.generationElement = document.getElementById('generation');
+		//this.generationElement = document.getElementById('generation');
 	}
 
 	init(shapes) {
@@ -190,8 +190,9 @@ class Controls {
 			controls.next();
 		});
 
-		document.getElementById('size').addEventListener('change', sizeListener);
-		document.getElementById('size').addEventListener('input', sizeListener);
+        // Hiding size selector for now.
+		//document.getElementById('size').addEventListener('change', sizeListener);
+		//document.getElementById('size').addEventListener('input', sizeListener);
 
 		function sizeListener() {
 			let oldGridSize = controls.canvas.getGridSize();
@@ -257,7 +258,7 @@ class Controls {
 
 	setGeneration(gen) {
 		this.generation = gen;
-		this.generationElement.innerHTML = gen;
+		//this.generationElement.innerHTML = gen;
 	}
 
 	animate() {
@@ -280,6 +281,9 @@ class GameOfLife {
 	constructor() {
 	}
 
+    /**
+     *  TODO(you): Fill in game of life rules logic.
+     */
 	next(shape) {
 		let neighbours = {};
 		let newShape = [];
