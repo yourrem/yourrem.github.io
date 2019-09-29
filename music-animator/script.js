@@ -1,68 +1,79 @@
+class MyVisualizer extends AbstractVisualizer {
+    MyVisualizer(analyzedAudio) {
+      this.peaks = analyzedAudio.peaks;
+    }
+
+    /**
+     * TODO(you): 
+     * 1) Call drawShapes() to re-draw the visual at the current time index.
+     *    -- If you want to "conditionally" draw (ex. only draw at a certain
+     *    BEAT in the song), what do you need to add?
+     * 2) Add the requestAnimationFrame loop which recursively calls
+     * itself ("updateVisual") to repeatedly update the visual.
+     */
+    updateVisual(index) {
+      index = index || 0;
+
+      if (index >= this.peaks.length) {
+          return;
+      }
+
+      const audioEl = document.querySelector('#audio');
+
+      if ((audioEl.currentTime * 1000) - this.peaks[index].timeOfPeak > 0) {
+
+        this.drawShapes();
+
+        requestAnimationFrame(function() {
+          this.updateVisual(index + 1)
+        });
+      } else {
+        requestAnimationFrame(function() {
+          this.updateVisual(index)
+        });
+      }
+    }
+
+    /**
+     * TODO(you): Draw the shapes you'd expect to see in your visual.
+     */
+    drawShapes() {
+        const point = {
+          x: generateRandomValue(300, 700),
+          y: generateRandomValue(100, 500),
+        };
+        const point2 = {
+          x: generateRandomValue(300, 700),
+          y: generateRandomValue(100, 500),
+        };
+        const radius =  generateRandomValue(5, 25);
+        const color = generateRandomColor();
+        const width = generateRandomValue(1, 2);
+        const i =  generateRandomValue(5, 25);
+        const startAngle =  generateRandomValue(0, Math.PI);
+        const endAngle =  generateRandomValue(0, Math.PI);
+
+        this.drawCircle(point, radius, {});
+        //this.drawSemiCircle(point, radius, startAngle, endAngle, 10, color);
+        //this.drawLine(point, point2, {});
+        //this.drawSpiral(i, point, color)
+        //this.drawSquigglyLine(point, i, {});
+    }
+}
+
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioContext.createAnalyser();
 const data = new Uint8Array(analyser.frequencyBinCount);
 
 const spotifyApi = new SpotifyWebApi();
 
-class MyVisualzier extends AbstractVisualizer {
-  renderBeatAnimation() {
-    const point = {
-      x: generateRandomValue(300, 700),
-      y: generateRandomValue(100, 500),
-    };
-    const point2 = {
-      x: generateRandomValue(300, 700),
-      y: generateRandomValue(100, 500),
-    };
-    const radius =  generateRandomValue(5, 25);
-    const color = generateRandomColor();
-    const width = generateRandomValue(1, 2);
-    const i =  generateRandomValue(5, 25);
-    const startAngle =  generateRandomValue(0, Math.PI);
-    const endAngle =  generateRandomValue(0, Math.PI);
-
-    //this.drawCircle(point, radius, {});
-    //this.drawSemiCircle(point, radius, startAngle, endAngle, 10, color);
-    //this.drawLine(point, point2, {});
-    //this.drawSpiral(i, point, color)
-    //this.drawSquigglyLine(point, i, {});
-  }
-}
-
-const visualizer = new MyVisualzier();
-
 getToken().then(function(token) {
   spotifyApi.setAccessToken(token);
 });
 
-function renderVisualization(analyzedAudio, index) {
-  const buffer = analyzedAudio.buffer;
-  const peaks = analyzedAudio.peaks;
-  const bpm = analyzedAudio.bpm;
-  const groups = analyzedAudio.groups;
-  index = index || 0;
-
-  if (index >= peaks.length) {
-		return;
-	}
-
-  const audioEl = document.querySelector('#audio');
-
-  if ((audioEl.currentTime * 1000) - peaks[index].timeOfPeak > 0) {
-
-    visualizer.renderBeatAnimation();
-
-    requestAnimationFrame(function() {
-      renderVisualization(analyzedAudio, index + 1)
-    });
-  } else {
-    requestAnimationFrame(function() {
-      renderVisualization(analyzedAudio, index)
-    });
-  }
-  
-}
-
+/**
+ * TODO(you): Add 'click' event listener and use Visualizer to start animation.
+ */
 document.getElementById('playButton').addEventListener('click', function(fromEvent) { 
   fromEvent.preventDefault();
 
@@ -79,8 +90,12 @@ document.getElementById('playButton').addEventListener('click', function(fromEve
 
           startMusic(audioEl, previewUrl, function(audio) {
             const analyzedAudio = analyzeAudio(audio);
+
+            // TODO(you): Create an instance of MyVisualizer.
+            const visualizer = new MyVisualizer(analyzedAudio);
+
             audioEl.play();
-            renderVisualization(analyzedAudio)
+            visualizer.updateVisual();
           });
         } else {
           console.warn('This song does not have a preview');
@@ -97,5 +112,4 @@ document.getElementById('playButton').addEventListener('click', function(fromEve
     audioEl.play();
 		document.getElementById('playCircle').setAttribute("id", "playCirclePlaying");
   }
-
 });
