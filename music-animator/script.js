@@ -1,6 +1,8 @@
 class MyVisualizer extends AbstractVisualizer {
-    MyVisualizer(analyzedAudio) {
+    constructor(analyzedAudio) {
+      super();
       this.peaks = analyzedAudio.peaks;
+      this.start();
     }
 
     /**
@@ -24,11 +26,11 @@ class MyVisualizer extends AbstractVisualizer {
 
         this.drawShapes();
 
-        requestAnimationFrame(function() {
+        requestAnimationFrame(() => {
           this.updateVisual(index + 1)
         });
       } else {
-        requestAnimationFrame(function() {
+        requestAnimationFrame(() => {
           this.updateVisual(index)
         });
       }
@@ -67,28 +69,31 @@ const data = new Uint8Array(analyser.frequencyBinCount);
 
 const spotifyApi = new SpotifyWebApi();
 
-getToken().then(function(token) {
+getToken().then((token) => {
   spotifyApi.setAccessToken(token);
 });
 
 /**
  * TODO(you): Add a 'click' event listener that starts the music.
  */
-document.getElementById('playButton').addEventListener('click', function(fromEvent) { 
+document.getElementById('playButton').addEventListener('click', (fromEvent) => { 
   fromEvent.preventDefault();
 
   const audioEl = document.querySelector('#audio');
   const queryInput = document.querySelector('#query')
+  document.getElementById('playCircle').setAttribute("class", "playing");
 
   if(!audioEl.src) {
+    // TODO(you): Use the spotifyApi to searchTracks for your input. Documentation can be found at:
+    // https://doxdox.org/jmperez/spotify-web-api-js#src-spotify-web-api.js-constr.prototype.searchtracks
     spotifyApi.searchTracks(queryInput.value.trim(), {limit: 1}) 
-      .then(function(results) {
+      .then((results) => {
         let track = results.tracks.items[0];
         let previewUrl = track.preview_url;
-        if(previewUrl) {
+        if (previewUrl) {
           queryInput.remove();
 
-          startMusic(audioEl, previewUrl, function(audio) {
+          startMusic(audioEl, previewUrl, (audio) => {
             const analyzedAudio = analyzeAudio(audio);
 
             // TODO(you): Create an instance of MyVisualizer.
@@ -99,17 +104,19 @@ document.getElementById('playButton').addEventListener('click', function(fromEve
           });
         } else {
           console.warn('This song does not have a preview');
+          document.getElementById('playCircle').setAttribute("class", "");
         }
       })
-      .catch(function(error) {
+      .catch((error) => {
         console.warn('Something went wrong');
         console.warn(error);
+        document.getElementById('playCircle').setAttribute("class", "");
       });
   } else if (!audioEl.paused) {
     audioEl.pause();
-		document.getElementById('playCirclePlaying').setAttribute("id", "playCircle");
+		document.getElementById('playCircle').setAttribute("class", "");
   } else {
     audioEl.play();
-		document.getElementById('playCircle').setAttribute("id", "playCirclePlaying");
+		document.getElementById('playCircle').setAttribute("class", "playing");
   }
 });
