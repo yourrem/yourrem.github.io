@@ -39,6 +39,8 @@ class AbstractVisualizer {
   }
 
   drawShape(shape, scale = 1.0) {
+    // TODO(adam/jamie): Convert params to object (just add to
+    // lineProperties).
     switch(shape.type) {
       case Shape.CIRCLE:
         this.drawCircle(shape.point, shape.radius * scale, {color: shape.color, width: shape.width});
@@ -62,13 +64,13 @@ class AbstractVisualizer {
    * TODO do we want to do this?
    */
   shrinkShapes() {
-    this.clearAllShapes();
-    // 2) "Animate" existing shapes by re-drawing them on the canvas and
-    // shrinking or growing them based on the boolean isGrowing (flips back and
-    // forth).
-    this.shapeArr.forEach((shape) => {
+      this.clearAllShapes();
+      // 2) "Animate" existing shapes by re-drawing them on the canvas and
+      // shrinking or growing them based on the boolean isGrowing (flips back and
+      // forth).
+      this.shapeArr.forEach((shape) => {
         this.drawShape(shape, this.shrinkScale);
-    });
+      });
   }
 
   /**

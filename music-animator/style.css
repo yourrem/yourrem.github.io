@@ -86,7 +86,7 @@ body {
     animation-timing-function: linear;
 }
 
-#playCirclePlaying {
+#playCircle.playing {
     border: 2px dotted #000;
     -webkit-animation-name: spin;
     -webkit-animation-duration: 4000ms;
