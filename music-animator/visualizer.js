@@ -22,6 +22,7 @@ class AbstractVisualizer {
     this.barCanvas = document.getElementById('bar-canvas');
     this.growScale = 2;
     this.shrinkScale = 1.2;
+    this.start();
   }
 
   renderBeatAnimation() {
