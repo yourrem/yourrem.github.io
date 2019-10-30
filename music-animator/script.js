@@ -78,7 +78,7 @@ document.getElementById('playButton').addEventListener('click', (clickEvent) => 
     // https://doxdox.org/jmperez/spotify-web-api-js#src-spotify-web-api.js-constr.prototype.searchtracks
     spotifyApi.searchTracks(queryInput,{limit: 1})
       .then((results) => {
-          let previewUrl = results.tracks.items[0].preview.url
+          let previewUrl = results.tracks.items[0].preview_url
         if (previewUrl) {
           // Sets the HTML audio element source to the music.
           audioEl.src = previewUrl;

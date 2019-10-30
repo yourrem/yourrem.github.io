@@ -271,7 +271,7 @@ function generateRandomValue(minValue = 1, maxValue = 10) {
   max = Math.floor(maxValue);
   return Math.floor(Math.random() * (max - min + 1) + min);
 
-  drawSquare(point1, point2, point3, point4, squareProperties) {
+  drawSquare(point1, point2, point3, point4, squareProperties) 
       const context = this.canvas.getContext("2d");
       context.fillStyle = squareProperties.color;
       context.moveTo(point1.x + sideLength , point1.y);
@@ -284,7 +284,7 @@ function generateRandomValue(minValue = 1, maxValue = 10) {
       context.lineWidth = squareProperties.width;
       context.strokeStyle = squareProperties.color;
       context.stroke();
-}
+
 
 
 
