@@ -156,8 +156,8 @@ const screens = {
     const tabsHtml = tabs.map((tab, i) =>
       `<li data-act="tab" data-i="${i}" data-active="${i === S.tab}">${t(tab.label)}</li>`).join("");
     const list = items.map((it, i) => `
-      <li ${nav(S, "list", i, it.live ? "live" : "")}>
-        <a${it.url && !it.live ? ` href="${esc(it.url)}" target="_blank" rel="noopener noreferrer"` : ""}>
+      <li ${nav(S, "list", i, it.live ? "live" : it.report ? "report" : "")}>
+        <a${it.url && !it.live && !it.report ? ` href="${esc(it.url)}" target="_blank" rel="noopener noreferrer"` : ""}>
           <span class="row">${it.icon ? `<img class="icon" src="${esc(it.icon)}" alt="" />` : ""}${t(it.name)}</span>
           <span class="row count">${t(":", { num: true })}${t(it.count ?? 1, { num: true })}</span>
         </a>
@@ -177,6 +177,7 @@ const screens = {
           ${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">${t("View")}${glyph("external-link-icon")}</a>` : ""}
           ${p.repo ? `<a href="${esc(p.repo)}" target="_blank" rel="noopener noreferrer">${t("Source")}${glyph("external-link-icon")}</a>` : ""}
           ${p.live ? `<span class="live-tag" data-act="live" data-i="${S.item}">${t("Live", { color: "yellow" })}</span>` : ""}
+          ${p.report ? `<span class="live-tag" data-act="report" data-i="${S.item}">${t("Report", { color: "yellow" })}</span>` : ""}
         </div>
       </div>` : "";
     return `
@@ -476,9 +477,37 @@ function liveWindow(data, S, onReady) {
     </div>`;
 }
 
+// Report reader over the Projects screen: a project's write-up as page
+// images, flipped with Left/Right, scrolled with Up/Down.
+function reportWindow(data, S) {
+  const p = data.projects?.tabs?.[S.tab]?.items?.[S.item];
+  const r = p?.report;
+  if (!r) return "";
+  const n = Math.min(Math.max(S.page, 1), r.pages);
+  const src = (k) => r.page.replace("{n}", String(k).padStart(2, "0"));
+  const link = (label, href, i) =>
+    `<a ${nav(S, "overlay", i)} data-text-color="yellow" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${t(label)}${glyph("external-link-icon")}</a>`;
+  return `
+    <div class="live-backdrop" data-act="closeLive"></div>
+    <div class="box report-window">
+      <div class="between report-head">
+        <span>${t(r.title)}</span>
+        <span class="report-links">${link("PDF", r.pdf, 0)}${r.source ? link("Source", r.source, 1) : ""}</span>
+      </div>
+      <div class="report-page scroll hide-scrollbar"><img src="${esc(src(n))}" alt="${esc(r.title)}, page ${n}" /></div>
+      ${n < r.pages ? `<link rel="prefetch" href="${esc(src(n + 1))}" />` : ""}
+      <div class="between report-foot">
+        <span class="report-flip" data-act="pageBack"${n > 1 ? "" : ' data-disabled="true"'}>${t("< Prev")}</span>
+        <span>${t(`Page ${n} / ${r.pages}`, { num: false })}</span>
+        <span class="report-flip" data-act="pageNext"${n < r.pages ? "" : ' data-disabled="true"'}>${t("Next >")}</span>
+      </div>
+    </div>`;
+}
+
 export function renderScreen(data, S, onReady) {
   return (screens[S.route] || screens.home)(data, S) + menu(data, S)
-    + (S.overlay === "live" ? liveWindow(data, S, onReady) : "");
+    + (S.overlay === "live" ? liveWindow(data, S, onReady) : "")
+    + (S.overlay === "report" ? reportWindow(data, S) : "");
 }
 
 // Title screen: NEW GAME / Continue? on black.

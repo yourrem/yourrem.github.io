@@ -248,7 +248,7 @@
 
 /* ---------------- Title screen (NEW GAME / Continue?) ---------------- */
 .title-screen { position: absolute; inset: 0; background: #000 url("../assets/ui/title-bg.jpg") center / cover no-repeat; animation: titleIn 1.2s ease-out backwards; outline: none; }
-.title-screen.leave { animation: fadeOut 0.6s ease-in forwards; }
+.title-screen.leave { animation: fadeOut 1s ease-in forwards; }
 @keyframes titleIn { from { opacity: 0; } }
 .title-menu { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 .title-menu li { display: flex; height: 29px; margin-bottom: 1rem; }  /* same rhythm as the main menu */
@@ -270,3 +270,16 @@
   border: 2.2px solid; border-color: rgba(0,0,0,.4) rgba(255,255,255,.2) rgba(255,255,255,.2) rgba(0,0,0,.4); }
 .live-bars span { flex: 1; min-height: 2px; background: linear-gradient(0deg, #6852ff, #c8c9f7); }
 .live-status { margin-top: 2rem; }
+
+/* ---------------- Report reader (project write-up as page images) ---------------- */
+.report-window { left: 70px; top: 10px; width: 960px; height: 805px; z-index: 9; padding: 1.25rem 1.75rem; display: flex; flex-direction: column; }
+.report-head { align-items: center; margin-bottom: 0.75rem; }
+.report-links { display: flex; gap: 2.5rem; }
+.report-links a { display: inline-flex; align-items: center; }
+.report-links a > .font-glyph { margin-left: 0.5rem; }
+.report-links a[data-nav]::before { left: -76px; top: 2px; }
+.report-page { flex: 1; overflow-y: auto; scroll-snap-type: none; background: #fff; border: 2.2px solid; border-color: rgba(0,0,0,.4) rgba(255,255,255,.2) rgba(255,255,255,.2) rgba(0,0,0,.4); }
+.report-page img { width: 100%; height: auto; image-rendering: auto; }
+.report-foot { align-items: center; margin-top: 0.75rem; }
+.report-flip { cursor: pointer; }
+.report-flip[data-disabled=true] { opacity: 0.35; cursor: default; }

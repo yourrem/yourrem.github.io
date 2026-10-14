@@ -28,7 +28,8 @@ const S = {
   histGroup: null,   // History: chosen save-data group, or null for the chooser
   loading: null,     // History: memory-card bar progress (0-100), or null
   corner: null,      // Config: corner being edited (tl/tr/bl/br)
-  overlay: null,     // Projects: "live" while the live-data window is open
+  overlay: null,     // Projects: "live" or "report" while that window is open
+  page: 1,           // Projects: page shown in the report reader
   location: 0
 };
 
@@ -45,6 +46,7 @@ function render({ enter = false, from = "boot" } = {}) {
   const scrolled = [...stage.querySelectorAll(".scroll")].map((el) => el.scrollTop);
   stage.innerHTML = `<div class="frame ${S.route}${enter ? ` enter from-${from}` : ""}">${renderScreen(data, S, () => { if (S.overlay) render(); })}</div>`;
   stage.querySelectorAll(".scroll").forEach((el, i) => { if (!enter) el.scrollTop = scrolled[i] || 0; });
+  if (S.pageTurned) { S.pageTurned = false; stage.querySelector(".report-page")?.scrollTo(0, 0); }
   stage.querySelector('[data-focused="true"]')?.scrollIntoView({ block: "nearest" });
 }
 
@@ -103,6 +105,9 @@ const ACTIONS = {
   },
   live(i) { S.item = i; S.overlay = "live"; S.group = "overlay"; S.index = 0; },
   closeLive() { S.overlay = null; S.group = "list"; S.index = S.item; },
+  report(i) { S.item = i; S.page = 1; S.overlay = "report"; S.group = "overlay"; S.index = 0; },
+  pageBack() { turnPage(-1); },
+  pageNext() { turnPage(1); },
   histGroup(i) { S.histGroup = i; S.group = "saves"; S.index = 0; play("saveSelect"); startLoading(); },
   corner(i) { const k = ["tl", "tr", "bl", "br"][i]; S.corner = S.corner === k ? null : k; },
   sound(i) { settings.sound = i === 0; applySettings(); },
@@ -168,6 +173,25 @@ function back() {
   render();
 }
 
+// Report reader: flip a page (and start it at the top).
+function turnPage(step) {
+  const r = data.projects?.tabs?.[S.tab]?.items?.[S.item]?.report;
+  if (!r) return false;
+  const next = Math.min(Math.max(S.page + step, 1), r.pages);
+  if (next === S.page) return false;
+  S.page = next;
+  S.pageTurned = true;                            // render() starts the new page at the top
+  return true;
+}
+
+function reportKey(key) {
+  if (key === "ArrowLeft" || key === "ArrowRight") {
+    if (turnPage(key === "ArrowRight" ? 1 : -1)) { play("select"); render(); }
+    return;
+  }
+  stage.querySelector(".report-page")?.scrollBy({ top: key === "ArrowDown" ? 160 : -160, behavior: "smooth" });
+}
+
 // Skills: the slot strips are rows (left/right), stacked above the list.
 function skillsKey(key) {
   const count = (g) => stage.querySelectorAll(`[data-nav="${g}"]`).length;
@@ -214,6 +238,11 @@ function resumeKey(key) {
 
 function onKey(e) {
   if (e.target.matches?.("input, textarea") || leaving) return;
+  if (S.overlay === "report" && e.key.startsWith("Arrow")) {
+    e.preventDefault();
+    reportKey(e.key);
+    return;
+  }
   if (S.route === "projects" && !S.overlay && e.key.startsWith("Arrow")) {
     e.preventDefault();
     projectsKey(e.key);
@@ -415,7 +444,7 @@ function pressStart(start) {
       history.replaceState(null, "", `#${saved}`);
     }
     stage.querySelector(".title-screen")?.classList.add("leave");
-    setTimeout(start, 650);
+    setTimeout(start, 1600);                       // 1s fade to black, then a short beat before the menu
   };
   const onKeyTitle = (e) => {
     if (e.key === "ArrowUp" || e.key === "ArrowDown") { e.preventDefault(); move(choice === 0 ? 1 : 0); }

@@ -137,7 +137,14 @@
             ],
             "description": "Random Forest and XGBoost models tuned by cross-validation to an RMSE of 0.05, back-tested to predict the 2025 winner.",
             "url": "https://github.com/yourrem/NBA-MVP-Prediction",
-            "repo": ""
+            "repo": "",
+            "report": {
+              "title": "Predicting the NBA MVP",
+              "pages": 33,
+              "page": "assets/reports/nba-mvp/page-{n}.webp",
+              "pdf": "assets/reports/nba-mvp/Predicting-the-NBA-MVP.pdf",
+              "source": "https://github.com/yourrem/NBA-MVP-Prediction/blob/main/NBA_MVP.qmd"
+            }
           }
         ]
       },
