@@ -2,7 +2,7 @@
 
 A personal site styled after the Final Fantasy VII menu screen.
 
-**Live:** https://yourrem.github.io/personal-site/
+**Live:** https://yourrem.github.io/
 
 It is a fully static site - plain HTML, CSS and JavaScript modules, with no
 build step - so it can be hosted anywhere that serves files.
