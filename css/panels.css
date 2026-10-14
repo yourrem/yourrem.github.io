@@ -38,7 +38,7 @@
 .proj-right li { height: 48px; }
 .proj-right li[data-nav]::before { top: 8px; }
 .proj-right a { display: flex; width: 100%; height: 100%; justify-content: space-between; align-items: center; }
-.proj-right .icon { width: 52px; height: 52px; margin: -2px 0.75rem -2px 0; object-fit: contain; image-rendering: pixelated; }
+.proj-right .icon { width: 46px; height: 46px; margin: 0 0.75rem 0 0; object-fit: contain; image-rendering: pixelated; }
 /* Soft white halo, like the glow on the reference's icons */
 .proj-right .icon { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 5px rgba(205, 210, 255, 0.55)); }
 .proj-right .count .font:first-child { margin-right: 0.5rem; }
