@@ -503,20 +503,20 @@
       [
         "Python",
         "pandas",
-        null,
+        "tidymodels",
         "scikit-learn",
         "SQL",
         "PostgreSQL",
-        null,
+        "Excel",
         "Git"
       ],
       [
+        "R",
+        "Tableau",
         "Airflow",
         "dbt",
-        "Tableau",
-        null,
-        null,
-        "R"
+        "Jupyter",
+        "Linux"
       ]
     ]
   },
@@ -596,7 +596,8 @@
     "back": "assets/sfx/back.mp3",
     "error": "assets/sfx/error.mp3",
     "materia": "assets/sfx/materia.mp3",
-    "saveSelect": "assets/sfx/saveSelect.mp3"
+    "saveSelect": "assets/sfx/saveSelect.mp3",
+    "save": "assets/sfx/save.mp3"
   },
   "resume": {
     "pdf": "assets/resume.pdf",
@@ -753,25 +754,6 @@
         236,
         120,
         30
-      ]
-    },
-    {
-      "name": "X",
-      "icon": "assets/icons/x.svg",
-      "background": "#000000",
-      "color": [
-        24,
-        24,
-        24
-      ],
-      "type": "Social",
-      "user": "@you",
-      "url": "https://x.com/",
-      "display": "x.com/you",
-      "color2": [
-        78,
-        78,
-        82
       ]
     },
     {

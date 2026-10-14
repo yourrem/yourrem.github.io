@@ -26,6 +26,7 @@ const S = {
   materia: [[], []], // Skills: skill name (or null) per materia slot, for Wpn. and Arm.
   pick: null,        // Skills: slot being filled, { group, index }
   histGroup: null,   // History: chosen save-data group, or null for the chooser
+  loading: null,     // History: memory-card bar progress (0-100), or null
   corner: null,      // Config: corner being edited (tl/tr/bl/br)
   location: 0
 };
@@ -36,9 +37,12 @@ const START = {
   history: "opts", contact: "links", config: "corners", resume: "links", links: "saves"
 };
 
-function render({ enter = false } = {}) {
+// `enter` plays the arrival animation; `from` (the screen we came from, or
+// "boot" on first load) picks which one - see "Screen transitions" in
+// css/components.css.
+function render({ enter = false, from = "boot" } = {}) {
   const scrolled = [...stage.querySelectorAll(".scroll")].map((el) => el.scrollTop);
-  stage.innerHTML = `<div class="frame ${S.route}${enter ? " enter" : ""}">${renderScreen(data, S)}</div>`;
+  stage.innerHTML = `<div class="frame ${S.route}${enter ? ` enter from-${from}` : ""}">${renderScreen(data, S)}</div>`;
   stage.querySelectorAll(".scroll").forEach((el, i) => { if (!enter) el.scrollTop = scrolled[i] || 0; });
   stage.querySelector('[data-focused="true"]')?.scrollIntoView({ block: "nearest" });
 }
@@ -56,6 +60,7 @@ function locked() {
 
 // Move the hand. Selection follows focus on list-style screens.
 function focus(group, index, { sound = true } = {}) {
+  if (leaving) return;                           // mid-transition: ignore input
   if (S.group === group && S.index === index) return;
   if (locked() && group !== S.group) return;     // mid-choice: the hand stays in its list
   S.group = group;
@@ -95,7 +100,7 @@ const ACTIONS = {
     S.group = S.pick.group; S.index = S.pick.index; S.pick = null;
     play("materia");
   },
-  histGroup(i) { S.histGroup = i; S.group = "saves"; S.index = 0; play("saveSelect"); },
+  histGroup(i) { S.histGroup = i; S.group = "saves"; S.index = 0; play("saveSelect"); startLoading(); },
   corner(i) { const k = ["tl", "tr", "bl", "br"][i]; S.corner = S.corner === k ? null : k; },
   sound(i) { settings.sound = i === 0; applySettings(); },
   crt(i) { settings.crt = i === 0; applySettings(); },
@@ -107,9 +112,32 @@ const ACTIONS = {
   location() { S.location += 1 + Math.floor(Math.random() * 5); }
 };
 
+// History: fill the memory-card bar in ten steps, then show the files.
+let loadTimer = null;
+function stopLoading() {
+  clearInterval(loadTimer);
+  loadTimer = null;
+  S.loading = null;
+}
+function startLoading() {
+  stopLoading();
+  S.loading = 0;
+  loadTimer = setInterval(() => {
+    S.loading += 10;
+    if (S.loading > 100) {            // one beat on the full bar, then the files
+      stopLoading();
+      render();
+      return;
+    }
+    if (S.loading === 100) play("save");
+    const bar = stage.querySelector(".mem-bar");
+    if (bar) { bar.style.width = `${S.loading}%`; bar.dataset.progress = S.loading; }
+  }, 80);
+}
+
 function act(el) {
   const fn = ACTIONS[el.dataset.act];
-  if (!fn) return false;
+  if (!fn || leaving) return false;
   fn(Number(el.dataset.i));
   play("select");
   render();
@@ -120,6 +148,7 @@ function act(el) {
 function back() {
   play("back");
   if (S.route === "history" && S.histGroup !== null) {
+    stopLoading();
     S.group = "opts"; S.index = S.histGroup; S.histGroup = null;
   } else if (S.route === "skills" && S.pick) {
     S.group = S.pick.group; S.index = S.pick.index; S.pick = null;
@@ -179,7 +208,7 @@ function resumeKey(key) {
 }
 
 function onKey(e) {
-  if (e.target.matches?.("input, textarea")) return;
+  if (e.target.matches?.("input, textarea") || leaving) return;
   if (S.route === "projects" && e.key.startsWith("Arrow")) {
     e.preventDefault();
     projectsKey(e.key);
@@ -242,22 +271,45 @@ function onKey(e) {
   }
 }
 
+// Route changes to or from Home play an exit animation on the current
+// screen first (class "leave"), then render the new one.
+let leaving = null;                  // pending exit timer, or null
+const LEAVE_MS = { home: 620, page: 250 };
+
 function onRoute() {
   const id = (location.hash || "#home").slice(1);
-  S.route = SCREENS.includes(id) ? id : "home";
-  S.group = START[S.route];
-  S.index = 0;
-  S.tab = 0; S.item = 0; S.slot = 0; S.histGroup = null; S.corner = null; S.pick = null;
-  if (S.route === "home") {
-    // Leave the hand on the menu entry we just came back from.
-    const from = (data.menu || []).filter((e) => !e.divider).findIndex((e) => e.id === onRoute.last);
-    if (from >= 0) S.index = from;
+  const next = SCREENS.includes(id) ? id : "home";
+  const prev = onRoute.last;
+
+  const arrive = () => {
+    leaving = null;
+    S.route = next;
+    S.group = START[S.route];
+    S.index = 0;
+    S.tab = 0; S.item = 0; S.slot = 0; S.histGroup = null; S.corner = null; S.pick = null;
+    stopLoading();
+    if (S.route === "home") {
+      // Leave the hand on the menu entry we just came back from.
+      const from = (data.menu || []).filter((e) => !e.divider).findIndex((e) => e.id === prev);
+      if (from >= 0) S.index = from;
+    }
+    onRoute.last = S.route;
+    const label = (data.menu || []).find((e) => e.id === S.route)?.label;
+    const base = data.profile?.name || "Portfolio";
+    document.title = label ? `${base} | ${label}` : base;
+    render({ enter: true, from: prev ? (prev === "home" ? "home" : "page") : "boot" });
+  };
+
+  clearTimeout(leaving);
+  leaving = null;
+  const frame = stage.querySelector(".frame");
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (frame && prev && prev !== next && !still && (prev === "home" || next === "home")) {
+    frame.className = `frame ${prev} leave`;      // drop the arrival classes so exit rules win
+    leaving = setTimeout(arrive, prev === "home" ? LEAVE_MS.home : LEAVE_MS.page);
+  } else {
+    arrive();
   }
-  onRoute.last = S.route;
-  const label = (data.menu || []).find((e) => e.id === S.route)?.label;
-  const base = data.profile?.name || "Portfolio";
-  document.title = label ? `${base} | ${label}` : base;
-  render({ enter: true });
 }
 
 async function boot() {

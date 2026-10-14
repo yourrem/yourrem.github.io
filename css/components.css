@@ -19,7 +19,7 @@
 }
 /* Fade the whole screen in on a route change only. */
 .frame.enter > .box,
-.frame.enter > .saves { opacity: 0; animation: fadeIn 0.25s ease-in 0.1s forwards; }
+.frame.enter > .saves { opacity: 0; animation: fadeIn 0.4s ease-out 0.05s forwards; }
 @keyframes fadeIn { to { opacity: 1; } }
 
 /* ---- Pointer hand: shown on whichever [data-nav] is focused ---- */
@@ -166,3 +166,48 @@ body.crt-effect .star { filter: blur(0.7px); }
 .menu a .font-glyph[data-sprite=external-link-icon] { margin-left: 0.5rem; opacity: 0; transition: opacity 0.3s ease; }
 .menu a[data-focused=true] .font-glyph[data-sprite=external-link-icon] { opacity: 0.7; }
 .close { left: 1066px; top: 15px; width: 49px; height: 52px; padding: 7px; z-index: 4; }
+
+/* ===========================================================
+   Screen transitions (classes set by main.js)
+     .enter.from-boot  first load: Home windows fly in from off screen
+     .enter.from-page  back to Home: windows fly in, menu grows open
+     .leave            current screen exits before the next renders
+     .enter.from-home  a page opens under the already-collapsed menu
+   =========================================================== */
+@keyframes inRight  { from { transform: translate3d(1400px, 0, 0); } }
+@keyframes inLeft   { from { transform: translate3d(-1400px, 0, 0); } }
+@keyframes inTop    { from { transform: translate3d(0, -1100px, 0); } }
+@keyframes inBottom { from { transform: translate3d(0, 1100px, 0); } }
+@keyframes outRight { to { transform: translate3d(1400px, 0, 0); } }
+@keyframes outLeft  { to { transform: translate3d(-1400px, 0, 0); } }
+@keyframes outTop   { to { transform: translate3d(0, -1100px, 0); } }
+@keyframes menuGrow   { from { height: 84px; } }
+@keyframes menuShrink { to { height: 84px; } }
+@keyframes fadeOut { to { opacity: 0; } }
+
+/* Home arriving: a long, soft deceleration into place, slightly staggered */
+.frame.home.enter > .box {
+  opacity: 1;
+  animation-duration: 0.8s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+  will-change: transform;
+}
+.frame.home.enter > .party     { animation-name: inRight;  animation-delay: 0.05s; }
+.frame.home.enter > .meta      { animation-name: inLeft;   animation-delay: 0.12s; }
+.frame.home.enter > .page-info { animation-name: inTop;    animation-delay: 0.19s; }
+.frame.home.enter.from-boot > .menu { animation-name: inBottom; animation-delay: 0.12s; }
+.frame.home.enter.from-page > .menu { animation: menuGrow 0.4s cubic-bezier(0.33, 1, 0.68, 1) both; }
+.frame.home.enter.from-page > .menu li { animation: fadeIn 0.3s ease-out 0.25s both; opacity: 0; }
+
+/* Home leaving: windows ease away, the menu shrinks to its title bar */
+.frame.home.leave > .box { will-change: transform; }
+.frame.home.leave > .party     { animation: outRight 0.6s cubic-bezier(0.5, 0, 0.75, 0) forwards; }
+.frame.home.leave > .meta      { animation: outLeft 0.6s cubic-bezier(0.5, 0, 0.75, 0) forwards; }
+.frame.home.leave > .page-info { animation: outTop 0.6s cubic-bezier(0.5, 0, 0.75, 0) forwards; }
+.frame.home.leave > .menu      { animation: menuShrink 0.4s cubic-bezier(0.65, 0, 0.35, 1) 0.15s forwards; }
+.frame.home.leave > .menu li   { animation: fadeOut 0.2s ease-in forwards; }
+
+/* A page opening from Home keeps the menu still; a page leaving fades */
+.frame.enter.from-home > .menu { opacity: 1; animation: none; }
+.frame.leave:not(.home) > :not(.menu) { animation: fadeOut 0.24s ease-in forwards; }

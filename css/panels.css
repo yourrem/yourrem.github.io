@@ -239,3 +239,8 @@
 .record-logo { width: 94px; height: 94px; margin: 5px; border-radius: 12px; }
 .portrait, .resume-portrait { border-radius: 12px; transform: scale(0.94); }
 .proj-right .icon { border-radius: 6px; transform: scale(0.92); }
+
+/* ---------------- History: memory-card loading bar ---------------- */
+.mem-loading { left: 334px; top: 365px; width: 27rem; height: 6rem; }
+.mem-bar { height: 3rem; background: linear-gradient(360deg, #2500cf, #6852ff 43%, #4831f7 55%, #2400d3 60%, #1d00f480 76%, #0e00bc00); }
+.mem-bar[data-progress="100"] { background: linear-gradient(360deg, #ba6fb0, #b6689b 43%, #8e65dd 55%, #9e61b2 60%, #81469480 76%, #371b8900); }

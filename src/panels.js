@@ -273,6 +273,13 @@ const screens = {
         <div class="box header header--text">${t("Select a Save Data File.")}</div>
         <div class="box mem-select" style="height:${16 + groups.length * 40}px"><ul>${opts}</ul></div>`;
     }
+    // Brief "reading the memory card" bar before the files appear;
+    // main.js advances it.
+    if (S.loading !== null) {
+      return `
+        <div class="box header header--text">${t("Checking Memory card.")}</div>
+        <div class="box mem-loading"><div class="mem-bar" data-progress="${S.loading}" style="width:${Math.min(S.loading, 100)}%"></div></div>`;
+    }
     const p = data.profile || {};
     const entries = groups[S.histGroup]?.entries || [];
     const file = String((S.group === "saves" ? S.index : 0) + 1).padStart(2, "0");
