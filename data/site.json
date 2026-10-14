@@ -15,7 +15,7 @@
     "nextLevelPct": 66,
     "limitLevel": 1,
     "limitPct": 100,
-    "gil": 86675
+    "gil": 3041
   },
   "home": {
     "locations": [
@@ -466,7 +466,7 @@
           },
           {
             "name": "Mouse",
-            "description": "Point, click, drag, repeat.",
+            "description": "For pointing and clicking",
             "slots": [
               2,
               1,

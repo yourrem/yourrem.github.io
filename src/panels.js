@@ -71,13 +71,19 @@ function slotStrip(S, layout = [], orbs = [], group = "") {
   return `<div class="slots">${groups}</div>`;
 }
 
-// Inline style that tints a slot's windows with the entry's own colours:
-// `color` fills the top-left corner, `color2` the bottom-left (defaulting to
-// a darker shade of `color`), and both fade into the normal window blue.
-function tint(entry) {
+// Inline style that tints a slot's windows with the entry's own colours,
+// built on the window gradient from Config: `color` is blended into the
+// top-left corner and `color2` (default: `color`) into the bottom-left, by
+// `strength` (0 = plain window, 1 = the raw brand colour).
+function tint(entry, strength = 1) {
   if (!entry.color) return "";
-  const second = entry.color2 || entry.color.map((v, i) => Math.round(v * 0.5 + [0, 10, 60][i] * 0.5));
-  return `--c-tl: rgb(${entry.color.join(", ")}); --c-bl: rgb(${second.join(", ")});`;
+  const mix = (brand, corner, k) => brand.map((v, i) => Math.round(v * k + corner[i] * (1 - k)));
+  const { tl, bl } = settings.colors;
+  const first = mix(entry.color, tl, strength);
+  const second = entry.color2
+    ? mix(entry.color2, bl, strength * 0.8)
+    : mix(entry.color.map((v, i) => Math.round(v * 0.5 + [0, 10, 60][i] * 0.5)), bl, strength);
+  return `--c-tl: rgb(${first.join(", ")}); --c-bl: rgb(${second.join(", ")});`;
 }
 
 function orbLabel(name, color) {
@@ -369,7 +375,7 @@ const screens = {
     const file = String(S.index + 1).padStart(2, "0");
     const slots = links.map((l, i) => `
       <a class="save" ${nav(S, "saves", i)} href="${esc(l.url)}" target="_blank" rel="noopener noreferrer"
-         style="top:${i * 244.5}px;${tint(l)}">
+         style="top:${i * 244.5}px;${tint(l, 0.45)}">
         <div class="box">
           <div class="save-main">
             <div class="app-icon" style="background:${esc(l.background || "#333")}">${l.icon ? `<img src="${esc(l.icon)}" alt="${esc(l.name)} icon" />` : ""}</div>
