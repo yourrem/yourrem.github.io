@@ -848,39 +848,6 @@
       "user": "josesaavedra13",
       "url": "https://www.linkedin.com/in/josesaavedra13/",
       "display": "linkedin.com/in/josesaavedra13"
-    },
-    {
-      "name": "Discord",
-      "icon": "assets/icons/discord.svg",
-      "background": "#5865f2",
-      "color": [
-        88,
-        101,
-        242
-      ],
-      "type": "Chat",
-      "user": "paris4351",
-      "url": "https://discord.com/users/310609222859620352",
-      "display": "discord.com"
-    },
-    {
-      "name": "Steam",
-      "icon": "assets/icons/steam.svg",
-      "background": "linear-gradient(135deg, #111d2e, #1387b8)",
-      "color": [
-        23,
-        26,
-        33
-      ],
-      "color2": [
-        19,
-        135,
-        184
-      ],
-      "type": "Games",
-      "user": "cixuT",
-      "url": "https://steamcommunity.com/id/cixuT/",
-      "display": "steamcommunity.com/id/cixuT"
     }
   ],
   "title": {
