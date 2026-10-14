@@ -108,6 +108,8 @@
 .orb[data-color=blue]   { background-position-x: 4px; }
 .orb[data-color=pink]   { background-position-x: -39px; }
 .orb[data-color=red]    { background-position-x: -82px; }
+/* Orange isn't on the sheet: it's the red orb shifted toward amber. */
+.orb[data-color=orange] { background-position-x: -82px; filter: hue-rotate(28deg) saturate(1.4) brightness(1.15); }
 .orb[data-color=green]  { background-position-x: -124px; }
 .orb[data-color=yellow] { background-position-x: -167px; }
 
@@ -150,9 +152,11 @@
 .star[data-color=pink]   { background-position-x: 0; }
 .star[data-color=green]  { background-position-x: -80px; }
 .star[data-color=red]    { background-position-x: -159px; }
+.star[data-color=orange] { background-position-x: -159px; filter: hue-rotate(28deg) saturate(1.4) brightness(1.15); }
 .star[data-color=yellow] { background-position-x: -239px; }
 .star[data-color=blue]   { background-position-x: -318px; }
 body.crt-effect .star { filter: blur(0.7px); }
+body.crt-effect .star[data-color=orange] { filter: hue-rotate(28deg) saturate(1.4) brightness(1.15) blur(0.7px); }
 
 /* ---- Scrolling lists: leave room on the left for the hand ---- */
 .scroll { overflow-y: auto; scroll-snap-type: y mandatory; }

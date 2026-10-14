@@ -38,7 +38,9 @@
 .proj-right li { height: 48px; }
 .proj-right li[data-nav]::before { top: 8px; }
 .proj-right a { display: flex; width: 100%; height: 100%; justify-content: space-between; align-items: center; }
-.proj-right .icon { width: 36px; height: 36px; margin-right: 0.75rem; object-fit: contain; }
+.proj-right .icon { width: 52px; height: 52px; margin: -2px 0.75rem -2px 0; object-fit: contain; image-rendering: pixelated; }
+/* Soft white halo, like the glow on the reference's icons */
+.proj-right .icon { filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8)) drop-shadow(0 0 5px rgba(205, 210, 255, 0.55)); }
 .proj-right .count .font:first-child { margin-right: 0.5rem; }
 .detail { display: flex; flex-direction: column; height: 100%; padding: 4px 0 5px; justify-content: space-between; }
 .detail-head { display: flex; flex-direction: column; gap: 0.2rem; }
@@ -238,7 +240,6 @@
 .app-icon img { width: 86px; height: 86px; }
 .record-logo { width: 94px; height: 94px; margin: 5px; border-radius: 12px; }
 .portrait, .resume-portrait { border-radius: 12px; transform: scale(0.94); }
-.proj-right .icon { border-radius: 6px; transform: scale(0.92); }
 
 /* ---------------- History: memory-card loading bar ---------------- */
 .mem-loading { left: 334px; top: 365px; width: 27rem; height: 6rem; }
