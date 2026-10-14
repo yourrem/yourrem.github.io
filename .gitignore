@@ -1,0 +1,5 @@
+.claude/
+.DS_Store
+__pycache__/
+# Raw source photo; the site only uses the pixelated assets/portrait.png
+assets/portrait-original.png

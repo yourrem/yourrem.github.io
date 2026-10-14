@@ -1,0 +1,877 @@
+{
+  "profile": {
+    "name": "José Saavedra",
+    "portrait": "assets/portrait.png",
+    "birthday": "2003-02-13",
+    "level": 23,
+    "hp": [
+      1342,
+      1342
+    ],
+    "mp": [
+      578,
+      578
+    ],
+    "nextLevelPct": 66,
+    "limitLevel": 1,
+    "limitPct": 100,
+    "gil": 86675
+  },
+  "home": {
+    "locations": [
+      "Oakland, California"
+    ],
+    "text": [
+      "I'm a {age} year old data analyst from Oakland, California.",
+      "B.S. in Statistics & Data Science, UC Santa Barbara.",
+      "I build data pipelines, models and dashboards."
+    ]
+  },
+  "menu": [
+    {
+      "id": "projects",
+      "label": "Projects"
+    },
+    {
+      "id": "skills",
+      "label": "Skills"
+    },
+    {
+      "id": "equip",
+      "label": "Equip"
+    },
+    {
+      "id": "history",
+      "label": "History"
+    },
+    {
+      "divider": true
+    },
+    {
+      "id": "resume",
+      "label": "Resume"
+    },
+    {
+      "id": "contact",
+      "label": "Contact"
+    },
+    {
+      "id": "links",
+      "label": "Links"
+    },
+    {
+      "id": "github",
+      "label": "Github",
+      "href": "https://github.com/yourrem",
+      "external": true
+    },
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "href": "https://www.linkedin.com/in/josesaavedra13/",
+      "external": true
+    },
+    {
+      "divider": true
+    },
+    {
+      "id": "config",
+      "label": "Config"
+    }
+  ],
+  "projects": {
+    "tabs": [
+      {
+        "label": "Projects",
+        "items": [
+          {
+            "name": "SF Crime Desk",
+            "year": "2026 - Present",
+            "icon": "",
+            "summary": "A data platform for San Francisco crime records.",
+            "skills": [
+              {
+                "name": "Python",
+                "color": "green"
+              },
+              {
+                "name": "PostgreSQL",
+                "color": "blue"
+              },
+              {
+                "name": "Airflow",
+                "color": "blue"
+              },
+              {
+                "name": "dbt",
+                "color": "blue"
+              }
+            ],
+            "description": "A daily self-healing ELT pipeline over 1M+ city records, feeding forecast and clustering models and a dbt-powered dashboard.",
+            "url": "https://yourrem.github.io/SF-Crime-Site/",
+            "repo": "https://github.com/yourrem/SF-Crime-Site"
+          },
+          {
+            "name": "NBA MVP Prediction",
+            "year": "2025",
+            "icon": "",
+            "summary": "Forecasting NBA MVP award shares from 40 years of data.",
+            "skills": [
+              {
+                "name": "R",
+                "color": "green"
+              },
+              {
+                "name": "tidymodels",
+                "color": "yellow"
+              },
+              {
+                "name": "ggplot2",
+                "color": "yellow"
+              }
+            ],
+            "description": "Random Forest and XGBoost models tuned by cross-validation to an RMSE of 0.05, back-tested to predict the 2025 winner.",
+            "url": "https://github.com/yourrem/NBA-MVP-Prediction",
+            "repo": ""
+          }
+        ]
+      },
+      {
+        "label": "Certificates",
+        "items": [
+          {
+            "name": "Google Data Analytics",
+            "year": "Google",
+            "icon": "",
+            "summary": "Google Data Analytics Professional Certificate.",
+            "skills": [
+              {
+                "name": "SQL",
+                "color": "green"
+              },
+              {
+                "name": "Tableau",
+                "color": "red"
+              },
+              {
+                "name": "Excel",
+                "color": "pink"
+              }
+            ],
+            "description": "Professional certificate covering data cleaning, analysis and visualization.",
+            "url": "",
+            "repo": ""
+          },
+          {
+            "name": "Google AI Essentials",
+            "year": "Google",
+            "icon": "",
+            "summary": "Google AI Essentials Certificate.",
+            "skills": [],
+            "description": "Certificate covering practical, responsible use of AI tools at work.",
+            "url": "",
+            "repo": ""
+          }
+        ]
+      }
+    ]
+  },
+  "skills": [
+    {
+      "name": "Python",
+      "color": "green",
+      "level": 4,
+      "max": 5,
+      "ap": 21000,
+      "next": 8000,
+      "description": "Scripting, analysis and pipelines.",
+      "abilities": [
+        "pandas",
+        "NumPy",
+        "scikit-learn"
+      ]
+    },
+    {
+      "name": "SQL",
+      "color": "green",
+      "level": 4,
+      "max": 5,
+      "ap": 21000,
+      "next": 8000,
+      "description": "Advanced querying and feature pipelines.",
+      "abilities": [
+        "Aggregates",
+        "Data Marts",
+        "ETL"
+      ]
+    },
+    {
+      "name": "R",
+      "color": "green",
+      "level": 4,
+      "max": 5,
+      "ap": 20000,
+      "next": 9000,
+      "description": "Statistical modeling and visualization.",
+      "abilities": [
+        "tidymodels",
+        "ggplot2",
+        "dplyr"
+      ]
+    },
+    {
+      "name": "PostgreSQL",
+      "color": "blue",
+      "level": 3,
+      "max": 5,
+      "ap": 12000,
+      "next": 6000,
+      "description": "Relational database behind my data platforms.",
+      "abilities": [
+        "Schemas",
+        "Model Outputs"
+      ]
+    },
+    {
+      "name": "Airflow",
+      "color": "blue",
+      "level": 3,
+      "max": 5,
+      "ap": 11000,
+      "next": 7000,
+      "description": "Orchestrating daily, self-healing ELT pipelines.",
+      "abilities": [
+        "DAGs",
+        "Scheduling",
+        "Retries"
+      ]
+    },
+    {
+      "name": "dbt",
+      "color": "blue",
+      "level": 3,
+      "max": 5,
+      "ap": 10000,
+      "next": 8000,
+      "description": "Transforming raw tables into data marts.",
+      "abilities": [
+        "Models",
+        "Data Marts"
+      ]
+    },
+    {
+      "name": "Redis",
+      "color": "blue",
+      "level": 2,
+      "max": 5,
+      "ap": 4000,
+      "next": 5000,
+      "description": "In-memory data store.",
+      "abilities": [
+        "Caching"
+      ]
+    },
+    {
+      "name": "pandas",
+      "color": "yellow",
+      "level": 4,
+      "max": 5,
+      "ap": 20000,
+      "next": 9000,
+      "description": "Data cleaning and transformation in Python.",
+      "abilities": [
+        "Cleaning",
+        "Transformation"
+      ]
+    },
+    {
+      "name": "scikit-learn",
+      "color": "yellow",
+      "level": 3,
+      "max": 5,
+      "ap": 12000,
+      "next": 6000,
+      "description": "Machine learning in Python.",
+      "abilities": [
+        "Ridge Regression",
+        "K-Means"
+      ]
+    },
+    {
+      "name": "tidymodels",
+      "color": "yellow",
+      "level": 3,
+      "max": 5,
+      "ap": 12000,
+      "next": 6000,
+      "description": "Predictive modeling pipelines in R.",
+      "abilities": [
+        "Random Forest",
+        "XGBoost",
+        "Cross-validation"
+      ]
+    },
+    {
+      "name": "Tableau",
+      "color": "red",
+      "level": 4,
+      "max": 5,
+      "ap": 20000,
+      "next": 9000,
+      "description": "Dashboards and data visualization.",
+      "abilities": [
+        "Dashboards",
+        "KPIs"
+      ]
+    },
+    {
+      "name": "Git",
+      "color": "pink",
+      "level": 3,
+      "max": 5,
+      "ap": 12000,
+      "next": 6000,
+      "description": "Version control.",
+      "abilities": [
+        "Branching",
+        "Github"
+      ]
+    },
+    {
+      "name": "Linux",
+      "color": "pink",
+      "level": 3,
+      "max": 5,
+      "ap": 11000,
+      "next": 7000,
+      "description": "Command line and servers.",
+      "abilities": [
+        "Shell"
+      ]
+    },
+    {
+      "name": "Jupyter",
+      "color": "pink",
+      "level": 4,
+      "max": 5,
+      "ap": 20000,
+      "next": 9000,
+      "description": "Notebooks for exploratory analysis.",
+      "abilities": [
+        "EDA"
+      ]
+    },
+    {
+      "name": "Excel",
+      "color": "pink",
+      "level": 3,
+      "max": 5,
+      "ap": 12000,
+      "next": 6000,
+      "description": "Spreadsheets for quick analysis.",
+      "abilities": [
+        "Pivot Tables"
+      ]
+    }
+  ],
+  "equip": {
+    "slots": [
+      {
+        "label": "Wpn.",
+        "equipped": 0,
+        "items": [
+          {
+            "name": "MacBook",
+            "description": "My main device. Goes wherever I go.",
+            "slots": [
+              2,
+              2,
+              2,
+              1,
+              1
+            ],
+            "growth": "Normal",
+            "stats": {
+              "Attack": 18,
+              "Attack%": 96,
+              "Defense": 0,
+              "Defense%": 0,
+              "Magic atk": 12,
+              "Magic def%": 0
+            }
+          },
+          {
+            "name": "PC",
+            "description": "The desktop. More power, less portable.",
+            "slots": [
+              2,
+              2,
+              2,
+              2
+            ],
+            "growth": "Double",
+            "stats": {
+              "Attack": 26,
+              "Attack%": 90,
+              "Defense": 0,
+              "Defense%": 0,
+              "Magic atk": 16,
+              "Magic def%": 0
+            }
+          }
+        ]
+      },
+      {
+        "label": "Arm.",
+        "equipped": 0,
+        "items": [
+          {
+            "name": "Keyboard",
+            "description": "Where the queries get written.",
+            "slots": [
+              2,
+              2,
+              1,
+              1
+            ],
+            "growth": "Normal",
+            "stats": {
+              "Attack": 0,
+              "Attack%": 0,
+              "Defense": 20,
+              "Defense%": 6,
+              "Magic atk": 0,
+              "Magic def%": 3
+            }
+          },
+          {
+            "name": "Mouse",
+            "description": "Point, click, drag, repeat.",
+            "slots": [
+              2,
+              1,
+              1
+            ],
+            "growth": "Normal",
+            "stats": {
+              "Attack": 0,
+              "Attack%": 0,
+              "Defense": 12,
+              "Defense%": 14,
+              "Magic atk": 0,
+              "Magic def%": 1
+            }
+          }
+        ]
+      },
+      {
+        "label": "Acc.",
+        "equipped": 0,
+        "items": [
+          {
+            "name": "Headphones",
+            "description": "Grants immunity to Silence.",
+            "slots": [],
+            "growth": "None",
+            "stats": {
+              "Attack": 0,
+              "Attack%": 0,
+              "Defense": 5,
+              "Defense%": 10,
+              "Magic atk": 0,
+              "Magic def%": 12
+            }
+          },
+          {
+            "name": "Monitor",
+            "description": "A second screen for the dashboards.",
+            "slots": [],
+            "growth": "None",
+            "stats": {
+              "Attack": 0,
+              "Attack%": 0,
+              "Defense": 0,
+              "Defense%": 0,
+              "Magic atk": 10,
+              "Magic def%": 0
+            }
+          }
+        ]
+      }
+    ],
+    "materia": [
+      [
+        "Python",
+        "pandas",
+        null,
+        "scikit-learn",
+        "SQL",
+        "PostgreSQL",
+        null,
+        "Git"
+      ],
+      [
+        "Airflow",
+        "dbt",
+        "Tableau",
+        null,
+        null,
+        "R"
+      ]
+    ]
+  },
+  "history": {
+    "groups": [
+      {
+        "label": "Career",
+        "entries": [
+          {
+            "name": "Max's Opera Cafe",
+            "role": "FOH Associate",
+            "years": "2025-26",
+            "level": 22,
+            "color": [
+              176,
+              32,
+              44
+            ],
+            "logo": "assets/logos/maxs.png",
+            "url": ""
+          }
+        ]
+      },
+      {
+        "label": "Education",
+        "entries": [
+          {
+            "name": "COOP Careers",
+            "role": "Data Analytics",
+            "years": "2026",
+            "level": 23,
+            "color": [
+              0,
+              150,
+              136
+            ],
+            "logo": "assets/logos/coop.png",
+            "url": "https://coopcareers.org/"
+          },
+          {
+            "name": "UC Santa Barbara",
+            "role": "B.S. Stats & DS",
+            "years": "2021-25",
+            "level": 22,
+            "color": [
+              254,
+              188,
+              17
+            ],
+            "logo": "assets/logos/ucsb.png",
+            "url": "https://www.ucsb.edu/",
+            "roleLabel": "Major"
+          }
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "description": "Reach me on any of these channels.",
+    "links": [
+      {
+        "label": "Email",
+        "href": "mailto:jose.saavedra13011@gmail.com"
+      },
+      {
+        "label": "Github",
+        "href": "https://github.com/yourrem"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/josesaavedra13/"
+      }
+    ]
+  },
+  "sfx": {
+    "select": "assets/sfx/select.mp3",
+    "back": "assets/sfx/back.mp3",
+    "error": "assets/sfx/error.mp3",
+    "materia": "assets/sfx/materia.mp3",
+    "saveSelect": "assets/sfx/saveSelect.mp3"
+  },
+  "resume": {
+    "pdf": "assets/resume.pdf",
+    "title": [
+      "Data Analyst",
+      "B.S. Statistics & Data Science"
+    ],
+    "links": [
+      {
+        "label": "Open PDF",
+        "href": "assets/resume.pdf"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/yourrem"
+      },
+      {
+        "label": "LinkedIn",
+        "href": "https://www.linkedin.com/in/josesaavedra13/"
+      }
+    ],
+    "stats": [
+      [
+        "Location",
+        "Oakland, CA"
+      ],
+      [
+        "Email",
+        "jose.saavedra13011@gmail.com"
+      ],
+      [
+        "School",
+        "UC Santa Barbara"
+      ],
+      [
+        "Fellowship",
+        "COOP Careers"
+      ]
+    ],
+    "summary": [
+      "I'm an Oakland based data analyst with a B.S. in Statistics & Data Science from UC Santa Barbara.",
+      "I work across the whole pipeline: cleaning and transforming data with SQL and Python, modeling it, and turning the results into dashboards.",
+      "Most recently I completed the COOP Careers Data Analytics Fellowship and built an end-to-end data platform on San Francisco crime records."
+    ],
+    "sections": [
+      {
+        "heading": "Education",
+        "records": [
+          {
+            "name": "COOP Careers",
+            "years": "Feb. - Jun. 2026",
+            "role": "Data Analytics Fellowship - San Francisco, CA",
+            "logo": "assets/logos/coop.png",
+            "url": "https://coopcareers.org/",
+            "lines": [
+              "Completed a 16-week fellowship program, strengthening expertise in data cleaning, transformation, analysis, and visualization using SQL, Python, and Tableau, alongside assistance in professional development.",
+              "Executed 200+ hours of intensive data analytics training, mastering end-to-end ETL processes, advanced SQL querying, Python scripting, and Tableau visualization to solve complex, real-world business data challenges.",
+              "Spearheaded a 4-analyst consultancy team to conduct exploratory data analysis on digital marketing performance; tracked key growth metrics (CPA, CPC, CVR) to deliver data-driven budget optimization strategies.",
+              "Evaluated campaign inventory across 17 ad exchanges and 231 publisher URLs; analyzing frequency distributions and KPIs to isolate high-performing niche distributors over high-volume distributors, delivering insights to optimize media spend."
+            ]
+          },
+          {
+            "name": "UC Santa Barbara",
+            "years": "2021 - 2025",
+            "role": "B.S. in Statistics & Data Science - Santa Barbara, CA",
+            "logo": "assets/logos/ucsb.png",
+            "url": "https://www.ucsb.edu/",
+            "lines": []
+          }
+        ]
+      },
+      {
+        "heading": "Projects",
+        "records": [
+          {
+            "name": "San Francisco Crime Desk",
+            "years": "Aug. 2026 - Present",
+            "role": "Python, PostgreSQL, Airflow, dbt",
+            "logo": "",
+            "url": "https://yourrem.github.io/SF-Crime-Site/",
+            "lines": [
+              "Designed an end-to-end data platform processing 1,059,613+ real-world government records (2018-present) with a daily self-healing ELT pipeline orchestrated with Apache Airflow.",
+              "Engineered SQL-driven feature pipelines to prepare daily incident aggregates and geolocation data from PostgreSQL, feeding a Ridge regression forecast model and a K-Means clustering model, with outputs stored back into Postgres for dashboard consumption.",
+              "Built a multi-page analytics dashboard (Overview, By Neighborhood, By Category, Trends) with date-range filtering and hourly breakdowns, powered by dbt data marts."
+            ]
+          },
+          {
+            "name": "NBA MVP Prediction Project",
+            "years": "Jun. 2025",
+            "role": "R, tidymodels, ggplot2",
+            "logo": "",
+            "url": "https://github.com/yourrem/NBA-MVP-Prediction",
+            "lines": [
+              "Developed an end-to-end predictive modeling pipeline in R (tidymodels) to forecast MVP award shares based on a 40-year historical dataset.",
+              "Evaluated Random Forest and XGBoost architectures through cross-validation, achieving an RMSE of 0.05 and successfully back-testing the model to predict the 2025 winner."
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "Experience",
+        "records": [
+          {
+            "name": "Max's Opera Cafe",
+            "years": "Jun. 2025 - Mar. 2026",
+            "role": "Front-of-House Operations Associate - San Francisco, CA",
+            "logo": "assets/logos/maxs.png",
+            "url": "",
+            "lines": [
+              "Utilized restaurant POS system to accurately process 100+ daily transactions and online orders, ensuring customer satisfaction and financial precision in a high-volume, fast-paced environment.",
+              "Monitored real-time stock levels and mitigated order discrepancies by communicating with the kitchen and providing alternatives to customers, maintaining high fulfillment rates."
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "Certifications",
+        "records": [
+          {
+            "name": "Google Data Analytics Professional Certificate",
+            "years": "",
+            "role": "",
+            "logo": "",
+            "url": "",
+            "lines": []
+          },
+          {
+            "name": "Google AI Essentials Certificate",
+            "years": "",
+            "role": "",
+            "logo": "",
+            "url": "",
+            "lines": []
+          }
+        ]
+      }
+    ]
+  },
+  "links": [
+    {
+      "name": "Instagram",
+      "icon": "assets/icons/instagram.svg",
+      "background": "linear-gradient(45deg, #f9ce34, #ee2a7b 50%, #6228d7)",
+      "color": [
+        221,
+        42,
+        123
+      ],
+      "type": "Social",
+      "user": "@paris30411",
+      "url": "https://www.instagram.com/paris30411/",
+      "display": "instagram.com/paris30411",
+      "color2": [
+        236,
+        120,
+        30
+      ]
+    },
+    {
+      "name": "X",
+      "icon": "assets/icons/x.svg",
+      "background": "#000000",
+      "color": [
+        24,
+        24,
+        24
+      ],
+      "type": "Social",
+      "user": "@you",
+      "url": "https://x.com/",
+      "display": "x.com/you",
+      "color2": [
+        78,
+        78,
+        82
+      ]
+    },
+    {
+      "name": "Spotify",
+      "icon": "assets/icons/spotify.svg",
+      "background": "#1db954",
+      "color": [
+        29,
+        185,
+        84
+      ],
+      "type": "Music",
+      "user": "gloslurpee",
+      "url": "https://open.spotify.com/user/gloslurpee",
+      "display": "open.spotify.com/user/gloslurpee"
+    },
+    {
+      "name": "Letterboxd",
+      "icon": "assets/icons/letterboxd.svg",
+      "background": "#202830",
+      "color": [
+        255,
+        128,
+        0
+      ],
+      "type": "Film",
+      "user": "paristsu",
+      "url": "https://letterboxd.com/paristsu/",
+      "display": "letterboxd.com/paristsu",
+      "color2": [
+        0,
+        192,
+        72
+      ]
+    },
+    {
+      "name": "GitHub",
+      "icon": "assets/icons/github.svg",
+      "background": "#181717",
+      "color": [
+        36,
+        41,
+        47
+      ],
+      "type": "Code",
+      "user": "yourrem",
+      "url": "https://github.com/yourrem",
+      "display": "github.com/yourrem",
+      "color2": [
+        110,
+        84,
+        148
+      ]
+    },
+    {
+      "name": "LinkedIn",
+      "icon": "assets/icons/linkedin.svg",
+      "background": "#0a66c2",
+      "color": [
+        10,
+        102,
+        194
+      ],
+      "type": "Work",
+      "user": "josesaavedra13",
+      "url": "https://www.linkedin.com/in/josesaavedra13/",
+      "display": "linkedin.com/in/josesaavedra13"
+    },
+    {
+      "name": "Discord",
+      "icon": "assets/icons/discord.svg",
+      "background": "#5865f2",
+      "color": [
+        88,
+        101,
+        242
+      ],
+      "type": "Chat",
+      "user": "paris4351",
+      "url": "https://discord.com/users/310609222859620352",
+      "display": "discord.com"
+    },
+    {
+      "name": "Steam",
+      "icon": "assets/icons/steam.svg",
+      "background": "linear-gradient(135deg, #111d2e, #1387b8)",
+      "color": [
+        23,
+        26,
+        33
+      ],
+      "color2": [
+        19,
+        135,
+        184
+      ],
+      "type": "Games",
+      "user": "cixuT",
+      "url": "https://steamcommunity.com/id/cixuT/",
+      "display": "steamcommunity.com/id/cixuT"
+    }
+  ]
+}

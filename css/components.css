@@ -1,0 +1,168 @@
+/* ===========================================================
+   Shared components: window box, cursor, text, character
+   header, bars, materia, menu.
+   =========================================================== */
+
+/* ---- Window ---- */
+.box {
+  position: absolute;
+  padding: 1.5rem;
+  background-color: #000;
+  /* Written out (not via --win-bg) so a slot can retint itself by
+     overriding --c-tl / --c-bl on its own element. */
+  background-image:
+    linear-gradient(135deg, var(--c-tl) 0%, transparent 50%, var(--c-br) 100%),
+    linear-gradient(45deg, var(--c-bl) 0%, var(--c-tr) 100%);
+  border-radius: 5px;
+  border: 2px solid #78797a;
+  border-image: url("../assets/ui/border.png") 9 / 24px / 5px;
+}
+/* Fade the whole screen in on a route change only. */
+.frame.enter > .box,
+.frame.enter > .saves { opacity: 0; animation: fadeIn 0.25s ease-in 0.1s forwards; }
+@keyframes fadeIn { to { opacity: 1; } }
+
+/* ---- Pointer hand: shown on whichever [data-nav] is focused ---- */
+[data-nav] { position: relative; cursor: pointer; }
+[data-nav][data-focused=true]::before {
+  content: "";
+  position: absolute;
+  left: -81px;
+  top: 6px;
+  width: 76px; height: 46px;
+  background: url("../assets/ui/cursor.png") no-repeat;
+  background-size: contain;
+  pointer-events: none;
+  z-index: 5;
+}
+/* A confirmed selection keeps a blinking hand while focus is elsewhere. */
+[data-nav][data-active=true]:not([data-focused=true])::before {
+  content: "";
+  position: absolute;
+  left: -81px;
+  top: 6px;
+  width: 76px; height: 46px;
+  background: url("../assets/ui/cursor.png") no-repeat;
+  background-size: contain;
+  pointer-events: none;
+  animation: blinking 0.1s steps(1) infinite;
+}
+@keyframes blinking { 0% { opacity: 1; } 50% { opacity: 0; } }
+
+/* ---- Text ---- */
+.para { display: flex; flex-wrap: wrap; column-gap: 6.5px; row-gap: 2.5px; }
+.row { display: flex; }
+.between { display: flex; justify-content: space-between; }
+.dim { opacity: 0.65; }
+[data-label=time] .font-glyph[data-sprite=":"] { animation: timeBlink 1.5s linear infinite; }
+@keyframes timeBlink { 0%, to { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* ---- Portrait ---- */
+.portrait { width: 145px; height: 165px; align-self: center; flex-shrink: 0; object-fit: cover; }
+.placeholder {
+  background:
+    repeating-conic-gradient(#8a8a8a 0 25%, #a5a5a5 0 50%) 0 0 / 16px 16px;
+  box-shadow: inset 0 0 0 3px #d8d8d8;
+}
+
+/* ---- Vitals (name / LV / HP / MP) ---- */
+.vitals { margin-top: 0.5rem; margin-left: 2rem; width: 270px; }
+.vitals .name { margin-bottom: 0.5rem; }
+.resource { display: flex; margin-top: -1px; height: 39px; }
+.resource > .font-glyph { margin-right: 0.5rem; }
+.resource .nums { display: flex; }
+.resource .num { width: 92px; display: flex; justify-content: flex-end; }
+.resource-bar {
+  position: relative;
+  height: 4px;
+  margin-top: -3px;
+  background-color: #500a12;
+  box-shadow: -4px 4px #1b0217;
+  overflow: hidden;
+}
+.resource-bar > div { position: absolute; top: 0; left: 0; height: 4px; }
+
+/* ---- Progress bars (next level / limit) ---- */
+.progress { position: relative; width: 13.5rem; height: 1.7rem; background: #cfcfcf; margin-left: 1.75rem; }
+.progress > div { position: absolute; inset: 0; margin: 0.2rem 0.3rem; background: #7b7a78; }
+.progress > div::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 2px 3px 3px #00000080; }
+.progress > div > div { height: 100%; }
+.progress > div > div[data-limit=true] { animation: limit 0.5s linear infinite; }
+@keyframes limit {
+  0% { background-color: #eec4b2; } 13% { background-color: #e6d7b0; }
+  25% { background-color: #e3e8b7; } 38% { background-color: #d6e9ba; }
+  50% { background-color: #c1e5a8; } 63% { background-color: #b9e9e3; }
+  75%, 88% { background-color: #c8c9f7; } to { background-color: #eec4b2; }
+}
+
+/* ---- Materia orbs, slots, stars ---- */
+.materia { display: flex; align-items: center; }
+.materia[data-color]::after { content: none; }
+.orb {
+  flex-shrink: 0;
+  width: 2.5rem; height: 30px;
+  margin-right: 0.5rem; margin-top: 0.1rem;
+  background: url("../assets/ui/materia-spritesheet.png") no-repeat;
+  background-size: 200px 30px;
+}
+.orb[data-color=blue]   { background-position-x: 4px; }
+.orb[data-color=pink]   { background-position-x: -39px; }
+.orb[data-color=red]    { background-position-x: -82px; }
+.orb[data-color=green]  { background-position-x: -124px; }
+.orb[data-color=yellow] { background-position-x: -167px; }
+
+.slots {
+  display: flex;
+  height: 2.7rem;
+  margin-top: 0.25rem;
+  padding-left: 0.5rem;
+  border-radius: 2px;
+  background-color: #ffffff26;
+  border: 2.2px solid;
+  border-color: rgba(0,0,0,.4) rgba(255,255,255,.2) rgba(255,255,255,.2) rgba(0,0,0,.4);
+}
+.slot-group { display: flex; position: relative; }
+.slot {
+  width: 40px; height: 40px;
+  margin-right: 0.5rem;
+  background: url("../assets/ui/materia-slot.png") no-repeat;
+  background-size: contain;
+}
+.slot + .slot::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: calc(50% - 6px);
+  width: 30px; height: 17px;
+  transform: translate(-50%, -50%);
+  background: url("../assets/ui/materia-connector.png") no-repeat;
+  background-size: cover;
+}
+.slot .orb { margin: 0.35rem 0 0 0.07rem; }
+
+.star {
+  width: 3.5rem; height: 3.5rem;
+  margin-right: 0.3rem;
+  background: url("../assets/ui/star-spritesheet.png") no-repeat;
+  background-size: 380px 130px;
+  background-position-y: -73px;
+}
+.star[data-star=true]   { background-position-y: 0; }
+.star[data-color=pink]   { background-position-x: 0; }
+.star[data-color=green]  { background-position-x: -80px; }
+.star[data-color=red]    { background-position-x: -159px; }
+.star[data-color=yellow] { background-position-x: -239px; }
+.star[data-color=blue]   { background-position-x: -318px; }
+body.crt-effect .star { filter: blur(0.7px); }
+
+/* ---- Scrolling lists: leave room on the left for the hand ---- */
+.scroll { overflow-y: auto; scroll-snap-type: y mandatory; }
+.scroll li { scroll-snap-align: start; display: flex; align-items: center; }
+
+/* ---- Menu ---- */
+.menu { left: 830px; top: 0; width: 270px; height: 535px; padding: 1.25rem 1.6rem 1.25rem 2.8rem; z-index: 3; }
+.menu--closed { height: 84px; }
+.menu li { height: 29px; margin-bottom: 1rem; display: flex; }
+.menu a { display: flex; }
+.menu a .font-glyph[data-sprite=external-link-icon] { margin-left: 0.5rem; opacity: 0; transition: opacity 0.3s ease; }
+.menu a[data-focused=true] .font-glyph[data-sprite=external-link-icon] { opacity: 0.7; }
+.close { left: 1066px; top: 15px; width: 49px; height: 52px; padding: 7px; z-index: 4; }
