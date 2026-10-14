@@ -50,4 +50,9 @@ export function play(id) {
   source.start();
 }
 
+// Resume the context from inside a user gesture; resolves once sound can play.
+export function unlockAudio() {
+  return ctx && ctx.state !== "running" ? ctx.resume().catch(() => {}) : Promise.resolve();
+}
+
 export function setSoundEnabled(value) { enabled = !!value; }

@@ -6,6 +6,7 @@
 import { t, para, glyph, esc } from "./text.js";
 import { timeText } from "./timer.js";
 import { settings, colorsAreDefault } from "./settings.js";
+import { live } from "./live.js";
 
 const SEPARATOR = "_".repeat(21);
 
@@ -149,8 +150,8 @@ const screens = {
     const tabsHtml = tabs.map((tab, i) =>
       `<li data-act="tab" data-i="${i}" data-active="${i === S.tab}">${t(tab.label)}</li>`).join("");
     const list = items.map((it, i) => `
-      <li ${nav(S, "list", i)}>
-        <a${it.url ? ` href="${esc(it.url)}" target="_blank" rel="noopener noreferrer"` : ""}>
+      <li ${nav(S, "list", i, it.live ? "live" : "")}>
+        <a${it.url && !it.live ? ` href="${esc(it.url)}" target="_blank" rel="noopener noreferrer"` : ""}>
           <span class="row">${it.icon ? `<img class="icon" src="${esc(it.icon)}" alt="" />` : ""}${t(it.name)}</span>
           <span class="row count">${t(":", { num: true })}${t(it.count ?? 1, { num: true })}</span>
         </a>
@@ -169,6 +170,7 @@ const screens = {
         <div class="detail-links" data-text-color="yellow">
           ${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">${t("View")}${glyph("external-link-icon")}</a>` : ""}
           ${p.repo ? `<a href="${esc(p.repo)}" target="_blank" rel="noopener noreferrer">${t("Source")}${glyph("external-link-icon")}</a>` : ""}
+          ${p.live ? `<span class="live-tag" data-act="live" data-i="${S.item}">${t("Live", { color: "yellow" })}</span>` : ""}
         </div>
       </div>` : "";
     return `
@@ -441,6 +443,52 @@ const screens = {
 
 export const SCREENS = Object.keys(screens);
 
-export function renderScreen(data, S) {
-  return (screens[S.route] || screens.home)(data, S) + menu(data, S);
+// Live-data window over the Projects screen.
+function liveWindow(data, S, onReady) {
+  const p = data.projects?.tabs?.[S.tab]?.items?.[S.item];
+  if (!p?.live) return "";
+  const state = live(p.live, onReady);
+  let body = `<p class="live-status">${t("Loading data...")}</p>`;
+  if (state.status === "error") body = `<p class="live-status">${t("Could not reach the data. Try again later.", { color: "red" })}</p>`;
+  if (state.status === "ready") {
+    const d = state.data;
+    const max = Math.max(...d.bars, 1);
+    body = `
+      <ul class="live-rows">${d.rows.map(([k, v]) =>
+        `<li class="between"><span>${t(k, { color: "blue" })}</span><span>${t(v)}</span></li>`).join("")}</ul>
+      <p class="live-label">${t(d.barsLabel, { color: "grey" })}</p>
+      <div class="live-bars">${d.bars.map((v) => `<span style="height:${(v / max) * 100}%"></span>`).join("")}</div>`;
+  }
+  return `
+    <div class="live-backdrop" data-act="closeLive"></div>
+    <div class="box live-window">
+      <div class="between live-head">
+        <span>${t(p.live.title || p.name)}</span>
+        <a ${nav(S, "overlay", 0)} data-text-color="yellow" href="${esc(p.url)}" target="_blank" rel="noopener noreferrer">${t("Open site")}${glyph("external-link-icon")}</a>
+      </div>
+      ${body}
+    </div>`;
+}
+
+export function renderScreen(data, S, onReady) {
+  return (screens[S.route] || screens.home)(data, S) + menu(data, S)
+    + (S.overlay === "live" ? liveWindow(data, S, onReady) : "");
+}
+
+// Title screen: NEW GAME / Continue? on black.
+// `choice` is the highlighted option; Continue? is greyed out until there
+// is a previous visit to continue from.
+export function renderTitle(data, choice, canContinue) {
+  const p = data.profile || {};
+  const title = data.title || {};
+  const option = (i, label, disabled = false) =>
+    `<li data-nav="title" data-i="${i}" data-focused="${choice === i}"${disabled ? ' data-disabled="true"' : ""}>${t(label)}</li>`;
+  return `
+    <div class="title-screen" tabindex="-1">
+      <ul class="title-menu">
+        ${option(0, "NEW GAME")}
+        ${option(1, "Continue?", !canContinue)}
+      </ul>
+      <p class="title-credit">${t(title.subtitle ? `${p.name}  -  ${title.subtitle}` : p.name, { color: "grey" })}</p>
+    </div>`;
 }

@@ -6,11 +6,11 @@
 
 import { loadData } from "./data.js";
 import { initStage } from "./stage.js";
-import { initAudio, play } from "./audio.js";
-import { initTimer } from "./timer.js";
+import { initAudio, play, unlockAudio } from "./audio.js";
+import { initTimer, resetTimer } from "./timer.js";
 import { t } from "./text.js";
 import { settings, loadSettings, applySettings, DEFAULT_COLORS } from "./settings.js";
-import { renderScreen, SCREENS } from "./panels.js";
+import { renderScreen, renderTitle, SCREENS } from "./panels.js";
 
 const stage = document.getElementById("stage");
 let data = null;
@@ -28,6 +28,7 @@ const S = {
   histGroup: null,   // History: chosen save-data group, or null for the chooser
   loading: null,     // History: memory-card bar progress (0-100), or null
   corner: null,      // Config: corner being edited (tl/tr/bl/br)
+  overlay: null,     // Projects: "live" while the live-data window is open
   location: 0
 };
 
@@ -42,7 +43,7 @@ const START = {
 // css/components.css.
 function render({ enter = false, from = "boot" } = {}) {
   const scrolled = [...stage.querySelectorAll(".scroll")].map((el) => el.scrollTop);
-  stage.innerHTML = `<div class="frame ${S.route}${enter ? ` enter from-${from}` : ""}">${renderScreen(data, S)}</div>`;
+  stage.innerHTML = `<div class="frame ${S.route}${enter ? ` enter from-${from}` : ""}">${renderScreen(data, S, () => { if (S.overlay) render(); })}</div>`;
   stage.querySelectorAll(".scroll").forEach((el, i) => { if (!enter) el.scrollTop = scrolled[i] || 0; });
   stage.querySelector('[data-focused="true"]')?.scrollIntoView({ block: "nearest" });
 }
@@ -55,12 +56,12 @@ function navItems() {
 // an item on Equip). Until it is confirmed or cancelled the hand is confined
 // to the list being chosen from, so hovering elsewhere changes nothing.
 function locked() {
-  return !!S.pick || (S.route === "equip" && S.group === "items");
+  return !!S.pick || !!S.overlay || (S.route === "equip" && S.group === "items");
 }
 
 // Move the hand. Selection follows focus on list-style screens.
 function focus(group, index, { sound = true } = {}) {
-  if (leaving) return;                           // mid-transition: ignore input
+  if (leaving || onTitle()) return;              // mid-transition / title screen: ignore
   if (S.group === group && S.index === index) return;
   if (locked() && group !== S.group) return;     // mid-choice: the hand stays in its list
   S.group = group;
@@ -100,6 +101,8 @@ const ACTIONS = {
     S.group = S.pick.group; S.index = S.pick.index; S.pick = null;
     play("materia");
   },
+  live(i) { S.item = i; S.overlay = "live"; S.group = "overlay"; S.index = 0; },
+  closeLive() { S.overlay = null; S.group = "list"; S.index = S.item; },
   histGroup(i) { S.histGroup = i; S.group = "saves"; S.index = 0; play("saveSelect"); startLoading(); },
   corner(i) { const k = ["tl", "tr", "bl", "br"][i]; S.corner = S.corner === k ? null : k; },
   sound(i) { settings.sound = i === 0; applySettings(); },
@@ -137,7 +140,7 @@ function startLoading() {
 
 function act(el) {
   const fn = ACTIONS[el.dataset.act];
-  if (!fn || leaving) return false;
+  if (!fn || leaving || onTitle()) return false;
   fn(Number(el.dataset.i));
   play("select");
   render();
@@ -147,7 +150,9 @@ function act(el) {
 // Step back one level; from a screen's top level, return Home.
 function back() {
   play("back");
-  if (S.route === "history" && S.histGroup !== null) {
+  if (S.overlay) {
+    ACTIONS.closeLive();
+  } else if (S.route === "history" && S.histGroup !== null) {
     stopLoading();
     S.group = "opts"; S.index = S.histGroup; S.histGroup = null;
   } else if (S.route === "skills" && S.pick) {
@@ -209,7 +214,7 @@ function resumeKey(key) {
 
 function onKey(e) {
   if (e.target.matches?.("input, textarea") || leaving) return;
-  if (S.route === "projects" && e.key.startsWith("Arrow")) {
+  if (S.route === "projects" && !S.overlay && e.key.startsWith("Arrow")) {
     e.preventDefault();
     projectsKey(e.key);
     return;
@@ -286,7 +291,7 @@ function onRoute() {
     S.route = next;
     S.group = START[S.route];
     S.index = 0;
-    S.tab = 0; S.item = 0; S.slot = 0; S.histGroup = null; S.corner = null; S.pick = null;
+    S.tab = 0; S.item = 0; S.slot = 0; S.histGroup = null; S.corner = null; S.pick = null; S.overlay = null;
     stopLoading();
     if (S.route === "home") {
       // Leave the hand on the menu entry we just came back from.
@@ -294,6 +299,7 @@ function onRoute() {
       if (from >= 0) S.index = from;
     }
     onRoute.last = S.route;
+    try { localStorage.setItem("ff7site.lastRoute", S.route); } catch { /* ignore */ }
     const label = (data.menu || []).find((e) => e.id === S.route)?.label;
     const base = data.profile?.name || "Portfolio";
     document.title = label ? `${base} | ${label}` : base;
@@ -355,9 +361,84 @@ async function boot() {
   });
   stage.addEventListener("change", (e) => { if (e.target.closest("input[data-ch-index]")) render(); });
 
-  document.addEventListener("keydown", onKey);
-  window.addEventListener("hashchange", onRoute);
-  onRoute();
+  pressStart(() => {
+    document.addEventListener("keydown", onKey);
+    window.addEventListener("hashchange", onRoute);
+    onRoute();
+  });
+}
+
+const onTitle = () => !!stage.querySelector(".title-screen");
+
+// Title screen on the first visit of a browser session: NEW GAME starts
+// over at Home with the play time reset; Continue? returns to the screen
+// you were last on. Choosing also unlocks sound, so the chime can play.
+// Deep links (e.g. #resume) skip it and open directly.
+function pressStart(start) {
+  let seen = false;
+  let saved = null;
+  try {
+    seen = sessionStorage.getItem("ff7site.started") === "1";
+    saved = localStorage.getItem("ff7site.lastRoute");
+  } catch { /* ignore */ }
+  const deepLink = location.hash && location.hash !== "#home";
+  if (seen || deepLink || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return start();
+
+  const canContinue = SCREENS.includes(saved);
+  let choice = canContinue ? 1 : 0;              // hand starts on Continue? when there's a save
+  stage.innerHTML = renderTitle(data, choice, canContinue);
+  // Take keyboard focus so the arrow keys work without clicking first
+  // (matters when the page opens inside another app's browser pane).
+  window.focus();
+  stage.querySelector(".title-screen").focus({ preventScroll: true });
+
+  const move = (to) => {
+    if (to === choice) return;
+    choice = to;
+    // Move the hand in place: re-rendering would replay the fade-in.
+    stage.querySelectorAll('[data-nav="title"]').forEach((li) => { li.dataset.focused = String(Number(li.dataset.i) === choice); });
+    unlockAudio().then(() => play("select"));
+  };
+  const choose = async () => {
+    if (choice === 1 && !canContinue) {           // no save to continue: buzz, stay put
+      unlockAudio().then(() => play("error"));
+      return;
+    }
+    cleanup();
+    try { sessionStorage.setItem("ff7site.started", "1"); } catch { /* ignore */ }
+    await unlockAudio();
+    play("saveSelect");
+    if (choice === 0) {
+      resetTimer();
+      history.replaceState(null, "", "#home");
+    } else {
+      history.replaceState(null, "", `#${saved}`);
+    }
+    stage.querySelector(".title-screen")?.classList.add("leave");
+    setTimeout(start, 650);
+  };
+  const onKeyTitle = (e) => {
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") { e.preventDefault(); move(choice === 0 ? 1 : 0); }
+    else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choose(); }
+  };
+  const onMove = (e) => {
+    const el = e.target.closest('[data-nav="title"]');
+    if (el) move(Number(el.dataset.i));
+  };
+  const onPress = (e) => {
+    const el = e.target.closest('[data-nav="title"]');
+    if (!el) return;
+    choice = Number(el.dataset.i);
+    choose();
+  };
+  function cleanup() {
+    window.removeEventListener("keydown", onKeyTitle);
+    stage.removeEventListener("mousemove", onMove);
+    stage.removeEventListener("pointerdown", onPress);
+  }
+  window.addEventListener("keydown", onKeyTitle);
+  stage.addEventListener("mousemove", onMove);
+  stage.addEventListener("pointerdown", onPress);
 }
 
 boot();

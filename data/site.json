@@ -109,7 +109,12 @@
             ],
             "description": "A daily self-healing ELT pipeline over 1M+ city records, feeding forecast and clustering models and a dbt-powered dashboard.",
             "url": "https://yourrem.github.io/SF-Crime-Site/",
-            "repo": "https://github.com/yourrem/SF-Crime-Site"
+            "repo": "https://github.com/yourrem/SF-Crime-Site",
+            "live": {
+              "type": "sfcrime",
+              "api": "https://yourrem.github.io/SF-Crime-Site/api/",
+              "title": "SF Crime Desk - Live"
+            }
           },
           {
             "name": "NBA MVP Prediction",
@@ -855,5 +860,9 @@
       "url": "https://steamcommunity.com/id/cixuT/",
       "display": "steamcommunity.com/id/cixuT"
     }
-  ]
+  ],
+  "title": {
+    "subtitle": "",
+    "prompt": "PRESS START"
+  }
 }

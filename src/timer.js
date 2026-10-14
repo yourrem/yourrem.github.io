@@ -29,3 +29,9 @@ export function initTimer(onTick) {
     onTick(timeText());
   }, 1000);
 }
+
+// "New Game": start the play-time counter over.
+export function resetTimer() {
+  total = 0;
+  store(0);
+}
